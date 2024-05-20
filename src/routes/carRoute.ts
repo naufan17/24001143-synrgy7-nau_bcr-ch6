@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
 import multer from 'multer'; 
-import { getCar, getCarById, createCar, updateCar, deleteCar } from '../service/carService';
-import uploadImageCar from '../service/imageService';
+import { getCar, getCarById, createCar, updateCar, deleteCar } from '../controllers/carController';
+import uploadImageCar from '../controllers/imageController';
 
 const router: Router = express.Router();
 const uploadImage = multer({ dest: 'public/images/car' });
