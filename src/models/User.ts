@@ -1,5 +1,4 @@
 import { Model } from 'objection';
-import Order from './Order';
 
 class User extends Model {
     id!: string;

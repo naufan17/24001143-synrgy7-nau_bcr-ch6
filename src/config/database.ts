@@ -17,5 +17,3 @@ const checkDatabaseConnection = async () => {
 }
 
 checkDatabaseConnection();
-
-export default db;
