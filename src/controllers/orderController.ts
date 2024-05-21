@@ -1,43 +1,39 @@
 import { Request, Response } from 'express';
-import { transaction } from 'objection';
-import OrderServices from '../services/OrderServices';
-import Order from '../models/Order';
-import Customer from '../models/Customer';
+import Controller from './Controller';
+import OrderService from '../services/OrderService';
 
-class OrderController {
-    async getOrder(req: Request, res: Response) {
+class OrderController extends Controller {
+    public getOrder = async (req: Request, res: Response) => {
         try {
-            const orders = await OrderServices.getAllOrders();
+            const orders = await OrderService.getAllOrders();
     
-            if (!orders || orders.length === 0) {
-                return res.status(404).json({ message: 'Order not found' });
+            if (!orders) {
+                return this.handleNotFound(res, 'Order not found');
             }
         
-            res.status(200).json({ orders: orders })
+            this.handleSuccess(res, orders )
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to fetch order' });
+            this.handleError(res, err, 'Failed to fetch order');
         }
     }
     
-    async getOrderById(req: Request, res: Response) {
+    public getOrderById = async (req: Request, res: Response) => {
         const id: string = req.params.id;
     
         try {
-            const order = await Order.query().findById(id).withGraphFetched('[cars, customers]');
+            const orders = await OrderService.getOrderById(id);
     
-            if (!order) {
-                return res.status(404).json({ message: 'Order not found' });
+            if (!orders) {
+                return this.handleNotFound(res, 'Order not found');
             }
         
-            res.status(200).json(order)
+            this.handleSuccess(res, orders )
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to fetch order' });
+            this.handleError(res, err, 'Failed to fetch order');
         }
     }
     
-    async createOrder(req: Request, res: Response) {
+    public createOrder = async (req: Request, res: Response) => {
         const {
             car_id,
             name,
@@ -47,66 +43,57 @@ class OrderController {
         } = req.body;
     
         try {
-            // const car = await Rent.query().where('car_id', car_id);
-            // const rent_start = new Date();
-            // const rent_end = new Date(rent_start.getTime() + duration * 24 * 60 * 60 * 1000);
-            // const total_price = car[0].rent_price * duration;
-    
-            // await transaction(Order.knex(), async (trx) => {
-            //     const customer = await Customer.query(trx).insert({
-            //         id: user_id,
-            //         name,
-            //         email,
-            //         address,
-            //     });
-    
-            //     await Order.query(trx).insert({
-            //         id: order_id,
-            //         car_id,
-            //         customer_id: customer.id,
-            //         duration,
-            //         rent_start,
-            //         rent_end,
-            //         total_price,
-            //         status: "Rented"
-            //     });
-            // });
+            await OrderService.createOrder(
+                car_id, 
+                name, 
+                email, 
+                address, 
+                duration
+            );
             
-            res.status(201).json({ message: 'Order created successfully' });
+            this.handleCreated(res, 'Order created successfully');
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to create order' });
+            this.handleError(res, err, 'Failed to create order');
         }
     };
     
-    async updateOrder(req: Request, res: Response) {
+    public updateOrder = async (req: Request, res: Response) => {
+        const {
+            car_id,
+            name,
+            email,
+            address,
+            duration,
+        } = req.body;
+    
+        try {
+            await OrderService.updateOrder(
+                car_id, 
+                name, 
+                email, 
+                address, 
+                duration
+            );
+            
+            this.handleCreated(res, 'Order updated successfully');
+        } catch (err) {
+            this.handleError(res, err, 'Failed to update order');
+        }
     }
     
-    async deleteOrder(req: Request, res: Response) {
+    public deleteOrder = async (req: Request, res: Response) => {
         const id: string = req.params.id;
     
         try {
-            const rowsDeleted = await transaction(Order.knex(), async (trx) => {
-                const order = await Order.query(trx).findById(id);
+            const order = await OrderService.deleteOrder(id);
     
-                if (!order) {
-                    res.status(404).json({ message: 'Order not found' });
-                    return
-                }
-    
-                await Order.query(trx).deleteById(id);
-                return await Customer.query(trx).deleteById(order.customer_id);
-            });
-    
-            if (rowsDeleted === 0) {
-                res.status(404).json({ message: 'Order not found' });
-                return
+            if (!order) {
+                return this.handleNotFound(res, 'Order not found')
             }
       
-            res.status(201).json({ message: 'Order deleted successfully' })
+            this.handleDeleted(res, 'Order deleted successfully')
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to delete order' });
+            this.handleError(res, err, 'Failed to delete order');
         }
     }
 }

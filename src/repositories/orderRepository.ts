@@ -12,7 +12,7 @@ class OrderRepository {
     }
 
     async create(
-        order_id: string,
+        id: string,
         car_id: string,
         user_id: string,
         name: string,
@@ -32,7 +32,7 @@ class OrderRepository {
             });
 
             await Order.query(trx).insert({
-                id: order_id,
+                id,
                 car_id,
                 customer_id: customer.id,
                 duration,
@@ -44,7 +44,18 @@ class OrderRepository {
         });
     }
 
-    async update(id: string) {}
+    async update(
+        id: string,
+        car_id: string,
+        user_id: string,
+        name: string,
+        email: string,
+        address: string,
+        duration: number,
+        rent_start: Date,
+        rent_end: Date,
+        total_price: number
+    ) {}
 
     async delete(id: string, customer_id: string) {
         return await transaction(Order.knex(), async (trx) => {

@@ -122,7 +122,7 @@ class CarController extends Controller {
             const car = await carService.deleteCar(id);
     
             if (!car) {
-                return res.status(404).json({ message: 'Car not found' })
+                return this.handleNotFound(res, 'Car not found')
             }
 
             this.handleDeleted(res, 'Car deleted successfully')
