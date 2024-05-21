@@ -1,6 +1,6 @@
 import cloudinary from '../config/cloudinary';
 
-class uploadImageService {
+class UploadImageService {
     async uploadImage(fileImage: any){
         return await cloudinary.uploader.upload(fileImage.path, { 
             folder: 'car', 
@@ -9,4 +9,4 @@ class uploadImageService {
     }
 }
 
-export default new uploadImageService();
+export default new UploadImageService();

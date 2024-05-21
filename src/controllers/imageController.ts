@@ -1,23 +1,23 @@
 import { Request, Response } from 'express';
-import uploadImageService  from '../services/uploadImageService';
+import Controller from './Controller'
+import UploadImageService  from '../services/UploadImageService';
 
-class imageController {
-    async uploadImageCar(req: Request, res: Response){
+class ImageController extends Controller {
+    public uploadImageCar = async (req: Request, res: Response) => {
         const fileImage = req.file;
 
         if (!fileImage) {
-            return res.status(400).json({ error: 'No image uploaded' });
+            return this.handleBadRequest(res, 'No image uploaded');
         }
     
         try {
-            const result = await uploadImageService.uploadImage(fileImage);
-            res.status(200).json({ url: result.secure_url });
+            const result = await UploadImageService.uploadImage(fileImage);
+            this.handleSuccess(res, result.secure_url);
         } catch (err) {
-            console.log(err);
-            res.status(500).json({ error: 'Error uploading image' })
+            this.handleError(res, err, 'Error uploading image')
         }
     }
     
 }
 
-export default new imageController();
+export default new ImageController();

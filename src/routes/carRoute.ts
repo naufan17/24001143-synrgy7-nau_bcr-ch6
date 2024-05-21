@@ -1,6 +1,6 @@
 import express, { Router } from 'express';
-import CarController from '../controllers/carController';
-import imageController from '../controllers/imageController';
+import CarController from '../controllers/CarController';
+import imageController from '../controllers/ImageController';
 import { uploadImageCar } from '../config/multer';
 
 const router: Router = express.Router();

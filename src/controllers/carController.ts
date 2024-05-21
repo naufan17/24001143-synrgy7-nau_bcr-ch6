@@ -1,40 +1,39 @@
 import { Request, Response } from 'express';
-import carService from '../services/carService';
+import Controller from './Controller';
+import carService from '../services/CarService';
 
-class CarController {
-    async getCar(req: Request, res: Response) {
+class CarController extends Controller {
+    public getCar = async (req: Request, res: Response) => {
         try {
             const cars = await carService.getAllCars();
     
-            if (!cars || cars.length === 0) {
-                return res.status(404).json({ message: 'Car not found' });
+            if (!cars) {
+                return this.handleNotFound(res, 'Car not found');
             }
     
-            res.status(200).json({ cars: cars })
+            this.handleSuccess(res, cars)
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to fetch car' });
+            this.handleError(res, err, 'Failed to fetch car');
         }
     }
     
-    async getCarById(req: Request, res: Response) {
+    public getCarById = async (req: Request, res: Response) => {
         const id: string = req.params.id;
         
         try {
             const car = await carService.getCarById(id);
     
             if (!car) {
-                return res.status(404).json({ message: 'Car not found' });
+                return this.handleNotFound(res, 'Car not found');
             }
     
-            res.status(200).json(car)
+            this.handleSuccess(res, car)
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to fetch car' });
+            this.handleError(res, err, 'Failed to fetch car');
         }
     }
     
-    async createCar(req: Request, res: Response) {
+    public createCar = async (req: Request, res: Response) => {
         const {
             plate,
             manufacture,
@@ -68,14 +67,13 @@ class CarController {
                 spec
             );
             
-            res.status(201).json({ message: 'Car created successfully' });
+            this.handleCreated(res, 'Car created successfully');
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to create car' });
+            this.handleError(res, err, 'Failed to create car');
         }
     };
     
-    async updateCar(req: Request, res: Response) {
+    public updateCar = async (req: Request, res: Response) => {
         const id: string = req.params.id;
         const {
             plate,
@@ -111,27 +109,25 @@ class CarController {
                 spec
             );
     
-            res.status(201).json({ message: 'Car updated successfully' });
+            this.handleCreated(res, 'Car updated successfully');
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to update car' });
+            this.handleError(res, err, 'Failed to update car');
         }
     }
     
-    async deleteCar(req: Request, res: Response) {
+    public deleteCar = async (req: Request, res: Response) => {
         const id: string = req.params.id;
     
         try {
-            const rowsDeleted = await carService.deleteCar(id);
+            const car = await carService.deleteCar(id);
     
-            if (rowsDeleted === 0) {
+            if (!car) {
                 return res.status(404).json({ message: 'Car not found' })
             }
-      
-            res.status(201).json({ message: 'Car deleted successfully' })
+
+            this.handleDeleted(res, 'Car deleted successfully')
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to delete car' });
+            this.handleError(res, err, 'Failed to delete car')
         }
     }
 }

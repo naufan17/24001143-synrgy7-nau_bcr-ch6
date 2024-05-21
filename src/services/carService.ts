@@ -1,9 +1,13 @@
 import { v4 as uuidv4 } from 'uuid';
-import carRepository from "../repositories/carRepository";
+import CarRepository from "../repositories/CarRepository";
 
 class CarService {
     async getAllCars() {
-        const cars = await carRepository.findAll();
+        const cars = await CarRepository.findAll();
+
+        if (!cars) {
+            return null;
+        }
 
         const formattedCar = cars.map((car: any) => ({
             id: car.id,
@@ -22,9 +26,13 @@ class CarService {
     }
 
     async getCarById(id: string) {
-        const car = await carRepository.findById(id);
-        let formattedCar: any = {}
+        const car = await CarRepository.findById(id);
 
+        if (!car) {
+            return null;
+        }
+
+        let formattedCar = {}
         if (car) {
             formattedCar = {
                 id: car.id,
@@ -64,7 +72,24 @@ class CarService {
         option: string,
         spec: string
     ){
-        const id: string = uuidv4();
+        const id = uuidv4();
+
+        return await CarRepository.create(
+            id,         
+            plate,
+            manufacture,
+            model,
+            image,
+            capacity,
+            description,
+            transmission,
+            type,
+            year,
+            rent_price,
+            available,
+            option,
+            spec
+        )
     }
 
     async updateCar(
@@ -83,7 +108,7 @@ class CarService {
         option: string,
         spec: string
     ){
-        return await carRepository.update(
+        return await CarRepository.update(
             id,         
             plate,
             manufacture,
@@ -94,12 +119,15 @@ class CarService {
             transmission,
             type,
             year,
+            rent_price,
+            available,
+            option,
+            spec
         )
     }
 
     async deleteCar(id: string){
-        return await 
-        await carRepository.delete(id);
+        return await CarRepository.delete(id);
     }
 }
 

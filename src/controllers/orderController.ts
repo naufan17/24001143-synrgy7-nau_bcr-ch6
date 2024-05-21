@@ -1,15 +1,13 @@
 import { Request, Response } from 'express';
 import { transaction } from 'objection';
-import { v4 as uuidv4 } from 'uuid';
-import orderServices from '../services/orderServices';
+import OrderServices from '../services/OrderServices';
 import Order from '../models/Order';
 import Customer from '../models/Customer';
-import Rent from '../models/Rent';
 
-class orderController {
+class OrderController {
     async getOrder(req: Request, res: Response) {
         try {
-            const orders = await orderServices.getAllOrders();
+            const orders = await OrderServices.getAllOrders();
     
             if (!orders || orders.length === 0) {
                 return res.status(404).json({ message: 'Order not found' });
@@ -113,4 +111,4 @@ class orderController {
     }
 }
 
-export default new orderController();
+export default new OrderController();

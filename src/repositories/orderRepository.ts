@@ -2,10 +2,9 @@ import { transaction } from 'objection';
 import Order from '../models/Order';
 import Customer from '../models/Customer';
 
-class orderRepository {
+class OrderRepository {
     async findAll() {
         return await Order.query().withGraphFetched('[cars, customers]');
-
     }
 
     async findById(id: string) {
@@ -55,4 +54,4 @@ class orderRepository {
     }
 }
 
-export default new orderRepository();
+export default new OrderRepository();
