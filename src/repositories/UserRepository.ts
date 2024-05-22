@@ -1,5 +1,5 @@
-import User from '../models/User';
 import bcrypt from 'bcryptjs';
+import User from '../models/User';
 
 class UserRepository {
     async findByEmail(email: string) {

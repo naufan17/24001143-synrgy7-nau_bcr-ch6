@@ -14,22 +14,22 @@ export async function seed(knex: Knex): Promise<void> {
     await knex("admins").insert([
         {
             "id": id_1,
-            "name": "Super Admin 1",
+            "username": "Super Admin 1",
             "password": await bcrypt.hash('passwordsuperadmin', 10),
         },
         {
             "id": id_2,
-            "name": "Super Admin 2",
+            "username": "Super Admin 2",
             "password": await bcrypt.hash('passwordsuperadmin', 10),
         },
         {
             "id": id_3,
-            "name": "Admin 1",
+            "username": "Admin 1",
             "password": await bcrypt.hash('passwordadmin', 10),
         },
         {
             "id": id_4,
-            "name": "Admin 2",
+            "username": "Admin 2",
             "password": await bcrypt.hash('passwordadmin', 10),
         },
     ]);
