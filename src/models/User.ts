@@ -5,7 +5,7 @@ class User extends Model {
     name!: string;
     email!: string;
     address!: string;
-    phone_number!: number;
+    phone_number!: string;
     password!: string;
     created_at!: Date;
     updated_at!: Date

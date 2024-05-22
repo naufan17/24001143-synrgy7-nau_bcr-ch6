@@ -1,104 +1,52 @@
 import { Request, Response } from 'express';
-import { v4 as uuidv4 } from 'uuid';
-import bcrypt from 'bcryptjs';
-import User from '../models/User';
+import Controller from './Controller';
+import UserService from '../services/UserService';
 
-class UserController {
-    async getAllUser(req: Request, res: Response) {
+class UserController extends Controller {    
+    public loginUser = async (req: Request, res: Response) => {
+        const { email, password } = req.body;
+    
         try {
-            const users = await User.query();
-    
-            if (!users || users.length === 0) {
-                return res.status(404).json({ message: 'User not found' });
+            const token = await UserService.loginUser(email, password);
+            
+            if (!token) {
+                return this.handleNotFound(res, 'User not found');
             }
-    
-            const formattedUser = users.map((car: any) => ({
-                id: car.id,
-                name: car.name,
-                email: car.email,
-                address: car.address,
-                phone_number: car.phone_number,
-                created_at: car.created_at,
-                updated_at: car.updated_at,
-            }));
-    
-            res.status(200).json({ users: formattedUser })
+
+            this.handleSuccess(res, { token: token })    
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to fetch user' });
+            this.handleError(res, err, 'Login failed')
         }
-    }
-    
-    async createUser(req: Request, res: Response) {
+    };    
+
+    public registerUser = async (req: Request, res: Response) => {
         const {
             name,
             email,
             address,
             phone_number,
-            password,
+            password
         } = req.body;
-        const user_id = uuidv4();
     
         try {
-            await User.query().insert({
-                id: user_id,
-                name,
-                email,
-                address,
-                phone_number,
-                password: await bcrypt.hash(password, 10),
-            });
+            const user = await UserService.registerUser(
+                name, 
+                email, 
+                address, 
+                phone_number, 
+                password
+            )
+
+            if (!user) {
+                return this.handleNotFound(res, 'User already registered');
+            }
             
-            res.status(201).json({ message: 'User created successfully' });
+            this.handleCreated(res, 'User created successfully');
         } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to create user' });
+            this.handleError(res, err, 'Failed to create user');
         }
     };
-    
-    async updateUser(req: Request, res: Response) {
-        const id: string = req.params.id;
-        const {
-            name,
-            email,
-            address,
-            phone_number,
-            password,
-        } = req.body;
-    
-        try {
-            await User.query().findById(id).update({
-                name,
-                email,
-                address,
-                phone_number,
-                password: await bcrypt.hash(password, 10),
-            });
-            
-            res.status(201).json({ message: 'User updated successfully' });
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to update user' });
-        }
-    }
-    
-    async deleteUser(req: Request, res: Response) {
-        const id: string = req.params.id;
-    
-        try {
-            const rowsDeleted = await User.query().deleteById(id);
-    
-            if (rowsDeleted === 0) {
-                res.status(404).json({ message: 'User not found' });
-                return
-            }
-      
-            res.status(201).json({ message: 'User deleted successfully' })
-        } catch (err) {
-            console.error(err);
-            res.status(500).json({ error: 'Failed to delete user' });
-        }
-    }
+
 }
 
 export default new UserController();

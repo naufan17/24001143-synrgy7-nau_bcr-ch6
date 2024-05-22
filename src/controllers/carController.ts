@@ -11,7 +11,7 @@ class CarController extends Controller {
                 return this.handleNotFound(res, 'Car not found');
             }
     
-            this.handleSuccess(res, cars)
+            this.handleSuccess(res, { cars: cars })
         } catch (err) {
             this.handleError(res, err, 'Failed to fetch car');
         }

@@ -12,7 +12,7 @@ class ImageController extends Controller {
     
         try {
             const result = await UploadImageService.uploadImage(fileImage);
-            this.handleSuccess(res, result.secure_url);
+            this.handleSuccess(res, { url: result.secure_url });
         } catch (err) {
             this.handleError(res, err, 'Error uploading image')
         }

@@ -11,7 +11,7 @@ class OrderController extends Controller {
                 return this.handleNotFound(res, 'Order not found');
             }
         
-            this.handleSuccess(res, orders )
+            this.handleSuccess(res, { orders: orders })
         } catch (err) {
             this.handleError(res, err, 'Failed to fetch order');
         }
