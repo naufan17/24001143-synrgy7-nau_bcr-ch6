@@ -13,7 +13,8 @@ export async function up(knex: Knex): Promise<void> {
         table.string('type', 20);
         table.integer('year', 10);
         table.timestamp('created_at').defaultTo(knex.fn.now());
-        table.timestamp('updated_at').defaultTo(knex.fn.now());    
+        table.timestamp('updated_at');
+        table.timestamp('deleted_at');
     })
 }
 

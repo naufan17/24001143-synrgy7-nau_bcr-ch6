@@ -1,11 +1,27 @@
 import { Knex } from "knex";
+import { v4 as uuidv4 } from 'uuid';
 
 export async function seed(knex: Knex): Promise<void> {
-    await knex("cars").del();
+    // await knex("cars").del();
+    // await knex("rents").del();
+    // await knex("options").del();
+    // await knex("specs").del();
+    // await knex("car_create").del();
+
+    const id_1 = uuidv4();
+    const id_2 = uuidv4();
+    const id_3 = uuidv4();
+    const id_4 = uuidv4();
+    const id_5 = uuidv4();
+    const id_6 = uuidv4();
+    const id_7 = uuidv4();
+    const id_8 = uuidv4();
+    const id_9 = uuidv4();
+    const id_10 = uuidv4();
 
     await knex("cars").insert([
         {
-            "id": "6e2bc663-5197-441a-957b-bc75e4a2da7c",
+            "id": id_1,
             "plate": "DBH-3491",
             "manufacture": "Ford",
             "model": "F150",
@@ -17,7 +33,7 @@ export async function seed(knex: Knex): Promise<void> {
             "year": 2022,
         },
         {
-            "id": "9ff03bbc-b18c-4ba7-8f3a-4c4b5c2f6c77",
+            "id": id_2,
             "plate": "WXB-3984",
             "manufacture": "BMW",
             "model": "X5",
@@ -29,7 +45,7 @@ export async function seed(knex: Knex): Promise<void> {
             "year": 2019,
         },
         {
-            "id": "bf6b5c43-1377-4ae0-8908-310c64266f81",
+            "id": id_3,
             "plate": "OSL-4224",
             "manufacture": "Lincoln",
             "model": "MKZ",
@@ -41,7 +57,7 @@ export async function seed(knex: Knex): Promise<void> {
             "year": 2021,
         },
         {
-            "id": "e1eebdd1-7065-40f2-8c1b-0dd1b6509f83",
+            "id": id_4,
             "plate": "LXD-2147",
             "manufacture": "Honda",
             "model": "Civic",
@@ -53,7 +69,7 @@ export async function seed(knex: Knex): Promise<void> {
             "year": 2020,
         },
         {
-            "id": "a3fcbe66-8166-4e58-8d58-4cbe6e4f22bb",
+            "id": id_5,
             "plate": "WMC-8412",
             "manufacture": "Chevrolet",
             "model": "Impala",
@@ -65,7 +81,7 @@ export async function seed(knex: Knex): Promise<void> {
             "year": 2018,
         },
         {
-            "id": "89cb8f64-3f98-4b8a-abc1-72f35c76e91d",
+            "id": id_6,
             "plate": "OPQ-7583",
             "manufacture": "Toyota",
             "model": "Camry",
@@ -77,7 +93,7 @@ export async function seed(knex: Knex): Promise<void> {
             "year": 2021,
         },
         {
-            "id": "97a8e593-6f3f-41ef-bda7-4c5e4324e9c3",
+            "id": id_7,
             "plate": "MSD-7631",
             "manufacture": "Tesla",
             "model": "Model S",
@@ -89,7 +105,7 @@ export async function seed(knex: Knex): Promise<void> {
             "year": 2021,
         },
         {
-            "id": "4fae5f5c-f4b9-40e7-8a78-5a3f2d5ad1b9",
+            "id": id_8,
             "plate": "ZXC-4738",
             "manufacture": "Nissan",
             "model": "Altima",
@@ -101,7 +117,7 @@ export async function seed(knex: Knex): Promise<void> {
             "year": 2022,
         },
         {
-            "id": "3b5f5e28-bc91-4421-a729-0a68e24d9b98",
+            "id": id_9,
             "plate": "JKL-2384",
             "manufacture": "Hyundai",
             "model": "Elantra",
@@ -113,7 +129,7 @@ export async function seed(knex: Knex): Promise<void> {
             "year": 2020,
         },
         {
-            "id": "b8d6f55b-3d1c-4e0a-bf95-902fae1db828",
+            "id": id_10,
             "plate": "RTY-9521",
             "manufacture": "Kia",
             "model": "Sorento",
@@ -123,6 +139,278 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Automatic",
             "type": "SUV",
             "year": 2020,
+        }
+    ]);
+
+    await knex("rents").insert([
+        {
+            "car_id": id_1,
+            "rent_price": 200000,
+        },
+        {
+            "car_id": id_2,
+            "rent_price": 800000,
+        },
+        {
+            "car_id": id_3,
+            "rent_price": 900000,
+        },
+        {
+            "car_id": id_4,
+            "rent_price": 300000,
+        },
+        {
+            "car_id": id_5,
+            "rent_price": 400000,
+        },
+        {
+            "car_id": id_6,
+            "rent_price": 350000,
+        },
+        {
+            "car_id": id_7,
+            "rent_price": 700000,
+        },
+        {
+            "car_id": id_8,
+            "rent_price": 320000,
+        },
+        {
+            "car_id": id_9,
+            "rent_price": 310000,
+        },
+        {
+            "car_id": id_10,
+            "rent_price": 500000,
+        }
+    ]);
+
+    await knex("specs").insert([
+        {
+            "car_id": id_1,
+            "spec": "Brake assist"
+        },
+        {
+            "car_id": id_1,
+            "spec": "Leather-wrapped shift knob"
+        },
+        {
+            "car_id": id_1,
+            "spec": "Glove box lamp"
+        },
+        {
+            "car_id": id_2,
+            "spec": "Rear passenger map pockets"
+        },
+        {
+            "car_id": id_2,
+            "spec": "Electrochromic rearview mirror"
+        },
+        {
+            "car_id": id_2,
+            "spec": "Dual chrome exhaust tips"
+        },
+        {
+            "car_id": id_3,
+            "spec": "Direct-type tire pressure monitor system"
+        },
+        {
+            "car_id": id_3,
+            "spec": "Cargo area lamp"
+        },
+        {
+            "car_id": id_4,
+            "spec": "Automatic temperature control"
+        },
+        {
+            "car_id": id_4,
+            "spec": "Electronic stability"
+        },
+        {
+            "car_id": id_5,
+            "spec": "Trip computer"
+        },
+        {
+            "car_id": id_5,
+            "spec": "Power steering"
+        },
+        {
+            "car_id": id_6,
+            "spec": "Power door mirrors"
+        },
+        {
+            "car_id": id_6,
+            "spec": "Front bucket seats"
+        },
+        {
+            "car_id": id_7,
+            "spec": "Navigation system"
+        },
+        {
+            "car_id": id_7,
+            "spec": "Wireless phone connectivity"
+        },
+        {
+            "car_id": id_8,
+            "spec": "Power driver seat"
+        },
+        {
+            "car_id": id_8,
+            "spec": "Rear window defroster"
+        },
+        {
+            "car_id": id_9,
+            "spec": "Front bucket seats"
+        },
+        {
+            "car_id": id_9,
+            "spec": "Rear window defroster"
+        },
+        {
+            "car_id": id_10,
+            "spec": "Exterior parking camera rear"
+        },
+        {
+            "car_id": id_10,
+            "spec": "Front dual zone A/C"
+        }
+    ]);
+
+    await knex("options").insert([
+        {
+            "car_id": id_1,
+            "option": "Cruise Control"
+        },
+        {
+            "car_id": id_1,
+            "option": "Tinted Glass"
+        },
+        {
+            "car_id": id_1,
+            "option": "AM/FM Stereo"
+        },
+        {
+            "car_id": id_2,
+            "option": "Keyless Entry"
+        },
+        {
+            "car_id": id_2,
+            "option": "Power Windows"
+        },
+        {
+            "car_id": id_2,
+            "option": "MP3 (Single Disc)"
+        },
+        {
+            "car_id": id_3,
+            "option": "Navigation System"
+        },
+        {
+            "car_id": id_3,
+            "option": "Bluetooth"
+        },
+        {
+            "car_id": id_4,
+            "option": "Leather Seats"
+        },
+        {
+            "car_id": id_4,
+            "option": "Backup Camera"
+        },
+        {
+            "car_id": id_5,
+            "option": "Remote Start"
+        },
+        {
+            "car_id": id_5,
+            "option": "Heated Seats"
+        },
+        {
+            "car_id": id_6,
+            "option": "Sunroof"
+        },
+        {
+            "car_id": id_6,
+            "option": "Parking Sensors"
+        },
+        {
+            "car_id": id_7,
+            "option": "Adaptive Cruise Control"
+        },
+        {
+            "car_id": id_7,
+            "option": "Lane Departure Warning"
+        },
+        {
+            "car_id": id_8,
+            "option": "Blind Spot Monitoring"
+        },
+        {
+            "car_id": id_8,
+            "option": "Apple CarPlay"
+        },
+        {
+            "car_id": id_9,
+            "option": "Android Auto"
+        },
+        {
+            "car_id": id_9,
+            "option": "Heated Steering Wheel"
+        },
+        {
+            "car_id": id_10,
+            "option": "Remote Start"
+        },
+        {
+            "car_id": id_10,
+            "option": "Heated Seats"
+        }
+    ]);
+
+    const admins = await knex('admins').select('id', 'name');
+    const admin_1 = admins.find(admin => admin.name === 'Admin 1')
+    const admin_2 = admins.find(admin => admin.name === 'Admin 2')
+
+    await knex("car_create").insert([
+        {
+            "car_id": id_1,
+            "admin_id": admin_1.id,
+        },
+        {
+            "car_id": id_2,
+            "admin_id": admin_1.id,
+        },
+        {
+            "car_id": id_3,
+            "admin_id": admin_1.id,
+        },
+        {
+            "car_id": id_4,
+            "admin_id": admin_1.id,
+        },
+        {
+            "car_id": id_5,
+            "admin_id": admin_1.id,
+        },
+        {
+            "car_id": id_6,
+            "admin_id": admin_2.id,
+        },
+        {
+            "car_id": id_7,
+            "admin_id": admin_2.id,
+        },
+        {
+            "car_id": id_8,
+            "admin_id": admin_2.id,
+        },
+        {
+            "car_id": id_9,
+            "admin_id": admin_2.id,
+        },
+        {
+            "car_id": id_10,
+            "admin_id": admin_2.id,
         }
     ]);
 };
