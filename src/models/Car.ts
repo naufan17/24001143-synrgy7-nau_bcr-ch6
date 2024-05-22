@@ -15,7 +15,7 @@ class Car extends Model {
     transmission!: string;
     type!: string;
     year!: number;
-    rents!: Rent[];
+    rents!: Rent;
     options!: Option[];
     specs!: Spec[];
     orders!: Order[];
@@ -29,7 +29,7 @@ class Car extends Model {
     static get relationMappings() {
         return {
             rents: {
-                relation: Model.HasManyRelation,
+                relation: Model.BelongsToOneRelation,
                 modelClass: Rent,
                 join: {
                     from: 'cars.id',

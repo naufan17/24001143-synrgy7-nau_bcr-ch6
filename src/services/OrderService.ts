@@ -41,31 +41,31 @@ class OrderService {
             return null;
         }
 
-        // let formattedOrder = {}
-        // if(order){
-        //     formattedOrder = {
-        //         id: order.id,
-        //         duration: order.duration,
-        //         rent_start: order.rent_start,
-        //         rent_end: order.rent_end,
-        //         total_price: order.total_price,
-        //         status: order.status,
-        //         car: {
-        //             manufacture: order.cars[0].manufacture,
-        //             model: order.cars[0].model,
-        //             type: order.cars[0].type,    
-        //         },
-        //         customer: {
-        //             name: order.customers[0].name,
-        //             email: order.customers[0].email,
-        //             address: order.customers[0].address,    
-        //         },
-        //         created_at: order.created_at,
-        //         updated_at: order.updated_at,
-        //     };    
-        // }
+        let formattedOrder = {}
+        if(order){
+            formattedOrder = {
+                id: order.id,
+                duration: order.duration,
+                rent_start: order.rent_start,
+                rent_end: order.rent_end,
+                total_price: order.total_price,
+                status: order.status,
+                car: {
+                    manufacture: order.cars.manufacture,
+                    model: order.cars.model,
+                    type: order.cars.type,    
+                },
+                customer: {
+                    name: order.customers.name,
+                    email: order.customers.email,
+                    address: order.customers.address,    
+                },
+                created_at: order.created_at,
+                updated_at: order.updated_at,
+            };    
+        }
         
-        return order;
+        return formattedOrder;
     }
 
     async createOrder(
@@ -81,8 +81,9 @@ class OrderService {
         const rent_end = new Date(rent_start.getTime() + duration * 24 * 60 * 60 * 1000);
         const car = await CarRepository.findById(car_id);
         let total_price = 0;
+        
         if(car){
-            total_price = car.rents[0].rent_price * duration;
+            total_price = car.rents.rent_price * duration;
         }
 
         return await OrderRepository.create(
@@ -105,16 +106,13 @@ class OrderService {
         email: string,
         address: string,
         duration: number,
-
-    ) {
-
-    }
+    ) {}
 
     async deleteOrder(id: string) {
         const order = await OrderRepository.findById(id);
         let customer_id = '';
         if(order){
-            customer_id = order.customers[0].id;
+            customer_id = order.customers.id;
         }
 
         return await OrderRepository.delete(id, customer_id);

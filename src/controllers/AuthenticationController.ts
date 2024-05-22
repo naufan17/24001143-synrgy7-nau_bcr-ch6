@@ -9,6 +9,7 @@ class AuthController extends Controller {
     
         try {
             const user = await User.query().findOne({ email });
+            
             if (!user) {
                 return this.handleNotFound(res, 'User not found');
             }

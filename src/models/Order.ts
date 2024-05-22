@@ -5,9 +5,9 @@ import Customer from './Customer';
 class Order extends Model {
     id!: string;
     car_id!: string;
-    cars!: Car[];
+    cars!: Car;
     customer_id!: string;
-    customers!: Customer[];
+    customers!: Customer;
     duration!: number;
     rent_start!: Date;
     rent_end!: Date;
@@ -38,7 +38,6 @@ class Order extends Model {
                     to: 'customers.id'
                 }
             }
-
         };
     }
 }

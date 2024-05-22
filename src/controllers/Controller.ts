@@ -31,7 +31,7 @@ class Controller {
 
     protected handleError(res: Response, error: any, message: string = 'An error occurred') {
         console.error(error);
-        res.status(500).json({ message, error });
+        res.status(500).json({ message });
     }
 }
 
