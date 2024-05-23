@@ -2,7 +2,13 @@ import { Request, Response } from 'express';
 import Controller from './Controller';
 import AdminService from '../services/AdminService';
 
-class UserController extends Controller {    
+class AdminController extends Controller {    
+    public currentAdmin = async (req: Request|any, res: Response) => {
+        const admin = req.user;
+
+        this.handleSuccess(res, admin)
+    }
+
     public loginAdmin = async (req: Request, res: Response) => {
         const { username, password } = req.body;
     
@@ -43,4 +49,4 @@ class UserController extends Controller {
 
 }
 
-export default new UserController();
+export default new AdminController();

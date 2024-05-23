@@ -2,7 +2,13 @@ import { Request, Response } from 'express';
 import Controller from './Controller';
 import UserService from '../services/UserService';
 
-class UserController extends Controller {    
+class UserController extends Controller {
+    public currentUser = async (req: Request|any, res: Response) => {
+        const user = req.user;
+
+        this.handleSuccess(res, user)
+    }
+
     public loginUser = async (req: Request, res: Response) => {
         const { email, password } = req.body;
     
@@ -43,7 +49,7 @@ class UserController extends Controller {
             
             this.handleCreated(res, 'User created successfully');
         } catch (err) {
-            this.handleError(res, err, 'Failed to create user');
+            this.handleError(res, err, 'Failed to register user');
         }
     };
 
