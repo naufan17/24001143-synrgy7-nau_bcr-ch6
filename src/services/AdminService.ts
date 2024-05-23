@@ -9,20 +9,21 @@ class AdminService {
         password: string
     ){
         const admin =  await AdminRepository.findByUsername(username);
+        return admin
 
-        if (!admin) {
-            return null;
-        }
+        // if (!admin) {
+        //     return null;
+        // }
 
-        const validPassword = await bcrypt.compare(password, admin.password);
+        // const validPassword = await bcrypt.compare(password, admin.password);
 
-        if(validPassword) {
-            const token = generateToken({ id: admin.id, username: admin.username });
+        // if(validPassword) {
+        //     const token = generateToken({ id: admin.id, username: admin.username, super_admin: admin.roles.super_admin });
 
-            return token;
-        } else {
-            return null;
-        }
+        //     return token;
+        // } else {
+        //     return null;
+        // }
     }
 
     async registerAdmin(

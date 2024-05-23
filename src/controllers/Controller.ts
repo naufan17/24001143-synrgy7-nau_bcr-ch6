@@ -21,10 +21,6 @@ class Controller {
         res.status(400).json({ message });
     }
 
-    protected handleUnauthorized(res: Response, message: string = 'Unauthorized') {
-        res.status(401).json({ message });
-    }
-
     protected handleNotFound(res: Response, message: string = 'Not found') {
         res.status(404).json({ message });
     }

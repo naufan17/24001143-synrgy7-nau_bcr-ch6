@@ -3,7 +3,7 @@ import Admin from '../models/Admin';
 
 class AdminRepository {
     async findByUsername(username: string) {
-        return await Admin.query().findOne({ username });
+        return await Admin.query().findOne({ username }).withGraphFetched('[roles]');
     }
 
     async create(

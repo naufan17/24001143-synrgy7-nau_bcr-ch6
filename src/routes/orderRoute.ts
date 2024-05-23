@@ -1,12 +1,13 @@
 import express, { Router } from 'express';
 import OrderController from '../controllers/OrderController';
+import AuthenticateMiddleware from '../middleware/AuthenticateMiddleware';
 
 const router: Router = express.Router();
 
-router.get('/order', OrderController.getOrder);
-router.get('/order/:id', OrderController.getOrderById);
-router.post('/order', OrderController.createOrder);
-router.put('/order/:id', OrderController.updateOrder);
-router.delete('/order/:id', OrderController.deleteOrder);
+router.get('/order', AuthenticateMiddleware.authenticate, OrderController.getOrder);
+router.get('/order/:id', AuthenticateMiddleware.authenticate, OrderController.getOrderById);
+router.post('/order', AuthenticateMiddleware.authenticate, OrderController.createOrder);
+router.put('/order/:id', AuthenticateMiddleware.authenticate, OrderController.updateOrder);
+router.delete('/order/:id', AuthenticateMiddleware.authenticate, OrderController.deleteOrder);
 
 export default router
