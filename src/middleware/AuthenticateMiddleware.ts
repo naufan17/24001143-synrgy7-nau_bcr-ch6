@@ -13,7 +13,7 @@ class AuthenticateMiddleware extends Middleware {
         try {
             const decoded = verifyToken(token);
             req.user = decoded;
-    
+
             next();
         } catch (err) {
             return this.handleForbidden(res, 'Invalid token');
