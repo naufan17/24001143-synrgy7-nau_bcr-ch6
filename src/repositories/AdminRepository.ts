@@ -1,5 +1,7 @@
+import { transaction } from 'objection';
 import bcrypt from 'bcryptjs';
 import Admin from '../models/Admin';
+import Role from '../models/Role';
 
 class AdminRepository {
     async findByUsername(username: string) {
@@ -11,11 +13,17 @@ class AdminRepository {
         username: string,
         password: string
     ) {
-        return await Admin.query().insert({
-            id,
-            username,
-            password: await bcrypt.hash(password, 10),
-        });
+        return await transaction(Admin.knex(), async (trx) => {
+            await Admin.query(trx).insert({
+                id,
+                username,
+                password: await bcrypt.hash(password, 10),
+            });
+
+            return await Role.query(trx).insert({
+                admin_id: id
+            })
+        })
     }
 }
 
