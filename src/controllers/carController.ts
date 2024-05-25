@@ -7,7 +7,7 @@ class CarController extends Controller {
         try {
             const cars = await carService.getAllCars();
     
-            if (!cars) {
+            if (!cars || cars.length === 0) {
                 return this.handleNotFound(res, 'Car not found');
             }
     

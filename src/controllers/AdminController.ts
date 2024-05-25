@@ -4,7 +4,7 @@ import AdminService from '../services/AdminService';
 
 class AdminController extends Controller {    
     public currentAdmin = async (req: Request|any, res: Response) => {
-        const admin = req.user;
+        const admin = req.admin;
 
         this.handleSuccess(res, admin)
     }

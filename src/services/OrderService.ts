@@ -22,15 +22,46 @@ class OrderService {
                 model: order.cars.model,
                 type: order.cars.type,    
             },
-            customer: {
-                name: order.customers.name,
-                email: order.customers.email,
-                address: order.customers.address,    
+            user: {
+                name: order.users.name,
+                email: order.users.email,
+                address: order.users.address,    
             },
             created_at: order.created_at,
             updated_at: order.updated_at,
         }));
 
+        return formattedOrder;
+    }
+
+    async getOrderByUser(user_id: string) {
+        const orders = await OrderRepository.findByUser(user_id);
+
+        if (!orders) {
+            return null;
+        }
+
+        const formattedOrder = orders.map((order: any) => ({
+            id: order.id,
+            duration: order.duration,
+            rent_start: order.rent_start,
+            rent_end: order.rent_end,
+            total_price: order.total_price,
+            status: order.status,
+            car: {
+                manufacture: order.cars.manufacture,
+                model: order.cars.model,
+                type: order.cars.type,    
+            },
+            user: {
+                name: order.users.name,
+                email: order.users.email,
+                address: order.users.address,    
+            },
+            created_at: order.created_at,
+            updated_at: order.updated_at,
+        }));
+        
         return formattedOrder;
     }
 
@@ -55,10 +86,10 @@ class OrderService {
                     model: order.cars.model,
                     type: order.cars.type,    
                 },
-                customer: {
-                    name: order.customers.name,
-                    email: order.customers.email,
-                    address: order.customers.address,    
+                user: {
+                    name: order.users.name,
+                    email: order.users.email,
+                    address: order.users.address,    
                 },
                 created_at: order.created_at,
                 updated_at: order.updated_at,
@@ -70,12 +101,9 @@ class OrderService {
 
     async createOrder(
         car_id: string,
-        name: string,
-        email: string,
-        address: string,
+        user_id: string,
         duration: number,
     ) {
-        const user_id = uuidv4();
         const id = uuidv4();
         const rent_start = new Date();
         const rent_end = new Date(rent_start.getTime() + duration * 24 * 60 * 60 * 1000);
@@ -90,9 +118,6 @@ class OrderService {
             id,
             car_id,
             user_id,
-            name,
-            email,
-            address,
             duration,
             rent_start,
             rent_end,
@@ -109,13 +134,7 @@ class OrderService {
     ) {}
 
     async deleteOrder(id: string) {
-        const order = await OrderRepository.findById(id);
-        let customer_id = '';
-        if(order){
-            customer_id = order.customers.id;
-        }
-
-        return await OrderRepository.delete(id, customer_id);
+        return await OrderRepository.delete(id);
     }
 }
 

@@ -10,7 +10,7 @@ class CarRepository {
     }
 
     async findById(id: string) {
-        return await Car.query().findById(id).withGraphFetched('[rents, options, specs]');        
+        return await Car.query().findById(id).withGraphFetched('[rents, options, specs]');
     }
 
     async create(

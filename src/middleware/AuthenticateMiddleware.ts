@@ -11,8 +11,13 @@ class AuthenticateMiddleware extends Middleware {
         }
     
         try {
-            const decoded = verifyToken(token);
-            req.user = decoded;
+            const decoded: any = verifyToken(token);
+
+            if(decoded.super_admin){
+                req.admin = decoded;
+            } else {
+                req.user = decoded;
+            }
 
             next();
         } catch (err) {

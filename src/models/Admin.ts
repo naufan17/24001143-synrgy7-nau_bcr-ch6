@@ -22,7 +22,7 @@ class Admin extends Model {
                     from: 'admins.id',
                     to: 'roles.admin_id'
                 }
-            },    
+            },
         };
     }
 }

@@ -29,7 +29,7 @@ class Car extends Model {
     static get relationMappings() {
         return {
             rents: {
-                relation: Model.BelongsToOneRelation,
+                relation: Model.HasOneRelation,
                 modelClass: Rent,
                 join: {
                     from: 'cars.id',
@@ -59,7 +59,7 @@ class Car extends Model {
                     from: 'cars.id',
                     to: 'orders.car_id'
                 }
-            },    
+            },
         };
     }
 }

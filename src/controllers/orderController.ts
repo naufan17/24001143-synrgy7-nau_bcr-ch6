@@ -3,11 +3,19 @@ import Controller from './Controller';
 import OrderService from '../services/OrderService';
 
 class OrderController extends Controller {
-    public getOrder = async (req: Request, res: Response) => {
+    public getOrder = async (req: Request|any, res: Response) => {
+        const user = req.user;
+        const admin = req.admin;
+
         try {
-            const orders = await OrderService.getAllOrders();
+            let orders;
+            if(user) {
+                orders = await OrderService.getOrderByUser(user.id);
+            } else if (admin) {
+                orders = await OrderService.getAllOrders();
+            }
     
-            if (!orders) {
+            if (!orders || orders.length === 0) {
                 return this.handleNotFound(res, 'Order not found');
             }
         
@@ -21,35 +29,43 @@ class OrderController extends Controller {
         const id: string = req.params.id;
     
         try {
-            const orders = await OrderService.getOrderById(id);
+            const order = await OrderService.getOrderById(id);
     
-            if (!orders) {
+            if (!order) {
                 return this.handleNotFound(res, 'Order not found');
             }
         
-            this.handleSuccess(res, orders )
+            this.handleSuccess(res, order)
         } catch (err) {
             this.handleError(res, err, 'Failed to fetch order');
         }
     }
     
-    public createOrder = async (req: Request, res: Response) => {
-        const {
+    public createOrder = async (req: Request|any, res: Response) => {
+        let {
+            user_id,
             car_id,
-            name,
-            email,
-            address,
             duration,
         } = req.body;
+        const user = req.user;
+        const admin = req.admin;
     
         try {
-            await OrderService.createOrder(
-                car_id, 
-                name, 
-                email, 
-                address, 
-                duration
-            );
+            if(user){
+                user_id = user.id;
+                await OrderService.createOrder(
+                    car_id,
+                    user_id,
+                    duration
+                );    
+            }
+            else if(admin){
+                await OrderService.createOrder(
+                    car_id,
+                    user_id,
+                    duration
+                );    
+            }
             
             this.handleCreated(res, 'Order created successfully');
         } catch (err) {
