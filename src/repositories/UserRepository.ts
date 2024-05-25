@@ -2,6 +2,10 @@ import bcrypt from 'bcryptjs';
 import User from '../models/User';
 
 class UserRepository {
+    async findAll() {
+        return await User.query();
+    }
+
     async findByEmail(email: string) {
         return await User.query().findOne({ email });
     }

@@ -6,7 +6,39 @@ class AdminController extends Controller {
     public currentAdmin = async (req: Request|any, res: Response) => {
         const admin = req.admin;
 
+        if(!admin) {
+            return this.handleUnauthorized(res);
+        }
+
         this.handleSuccess(res, admin)
+    }
+
+    public getAdmin = async (req: Request, res: Response) => {
+        try {
+            const admins = await AdminService.getAllAdmin();
+
+            if (!admins || admins.length === 0) {
+                return this.handleNotFound(res, 'Admin not found');
+            }
+
+            this.handleSuccess(res, { admins: admins });
+        } catch (err) {
+            this.handleError(res, err, 'Failed to fetch admin')
+        }
+    }
+
+    public getUser = async (req: Request, res: Response) => {
+        try {
+            const users = await AdminService.getAllUser();
+
+            if (!users || users.length === 0) {
+                return this.handleNotFound(res, 'User not found');
+            }
+
+            this.handleSuccess(res, { users: users });
+        } catch (err) {
+            this.handleError(res, err, 'Failed to fetch user')
+        }
     }
 
     public loginAdmin = async (req: Request, res: Response) => {

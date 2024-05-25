@@ -6,7 +6,11 @@ class UserController extends Controller {
     public currentUser = async (req: Request|any, res: Response) => {
         const user = req.user;
 
-        this.handleSuccess(res, user)
+        if(!user) {
+            return this.handleUnauthorized(res);
+        }
+
+        this.handleSuccess(res, user);
     }
 
     public loginUser = async (req: Request, res: Response) => {
@@ -23,7 +27,7 @@ class UserController extends Controller {
         } catch (err) {
             this.handleError(res, err, 'Login failed')
         }
-    };    
+    } 
 
     public registerUser = async (req: Request, res: Response) => {
         const {

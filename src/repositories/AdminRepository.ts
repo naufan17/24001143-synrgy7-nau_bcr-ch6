@@ -4,8 +4,12 @@ import Admin from '../models/Admin';
 import Role from '../models/Role';
 
 class AdminRepository {
+    async findAll() {
+        return await Admin.query().withGraphFetched('[roles]');
+    }
+
     async findByUsername(username: string) {
-        return await Admin.query().findOne({ username }).withGraphFetched('roles');
+        return await Admin.query().findOne({ username }).withGraphFetched('[roles]');
     }
 
     async create(

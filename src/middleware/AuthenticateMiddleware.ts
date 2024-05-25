@@ -4,7 +4,7 @@ import Middleware from './Middleware'
 
 class AuthenticateMiddleware extends Middleware {
     public authenticate = (req: Request|any, res: Response, next: NextFunction) => {
-        const token = req.header('Authorization')?.split(' ')[1];
+        const token: string = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {
             return this.handleUnauthorized(res);
@@ -13,17 +13,17 @@ class AuthenticateMiddleware extends Middleware {
         try {
             const decoded: any = verifyToken(token);
 
-            if(decoded.super_admin){
+            if(decoded.super_admin === true || decoded.super_admin === false) {
                 req.admin = decoded;
+                next();
             } else {
                 req.user = decoded;
+                next();
             }
-
-            next();
         } catch (err) {
-            return this.handleForbidden(res, 'Invalid token');
+            this.handleForbidden(res, 'Invalid token');
         }
     };    
 }
 
-export default new AuthenticateMiddleware();
+export default new AuthenticateMiddleware();``

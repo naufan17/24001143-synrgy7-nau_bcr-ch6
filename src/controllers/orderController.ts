@@ -6,9 +6,9 @@ class OrderController extends Controller {
     public getOrder = async (req: Request|any, res: Response) => {
         const user = req.user;
         const admin = req.admin;
+        let orders;
 
         try {
-            let orders;
             if(user) {
                 orders = await OrderService.getOrderByUser(user.id);
             } else if (admin) {
@@ -42,29 +42,22 @@ class OrderController extends Controller {
     }
     
     public createOrder = async (req: Request|any, res: Response) => {
-        let {
-            user_id,
+        const {
             car_id,
             duration,
         } = req.body;
         const user = req.user;
-        const admin = req.admin;
-    
+        const user_id = user.id;
+
         try {
             if(user){
-                user_id = user.id;
                 await OrderService.createOrder(
                     car_id,
                     user_id,
                     duration
                 );    
-            }
-            else if(admin){
-                await OrderService.createOrder(
-                    car_id,
-                    user_id,
-                    duration
-                );    
+            } else {
+                this.handleUnauthorized(res)
             }
             
             this.handleCreated(res, 'Order created successfully');

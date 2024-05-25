@@ -3,23 +3,31 @@ import Middleware from './Middleware';
 
 class AuthorizationMiddleware extends Middleware {
     public authorizeAdmin = (req: Request|any, res: Response, next: NextFunction) => {
-        const admin = req.admin;
+        const admin = req.admin
 
-        if (!admin.super_admin) {
+        if (admin) {
+            if (admin.super_admin === true || admin.super_admin === false) {
+                next();
+            } else {
+                return this.handleUnauthorized(res);
+            }
+        } else {
             return this.handleUnauthorized(res);
         }
-
-        next();
     }
 
     public authorizeSuperAdmin = (req: Request|any, res: Response, next: NextFunction) => {
-        const admin = req.admin;
+        const admin = req.admin
 
-        if (admin.super_admin === false) {
+        if (admin) {
+            if (admin.super_admin === true) {
+                next();
+            } else {
+                return this.handleUnauthorized(res);
+            }
+        } else {
             return this.handleUnauthorized(res);
         }
-
-        next();
     }
 }
 
