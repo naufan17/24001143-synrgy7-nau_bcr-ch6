@@ -11,7 +11,7 @@ export async function up(knex: Knex): Promise<void> {
         table.integer('total_price', 50);
         table.string('status', 20);
         table.timestamp('created_at').defaultTo(knex.fn.now());
-        table.timestamp('updated_at');    
+        table.timestamp('updated_at');
     })
 }
 

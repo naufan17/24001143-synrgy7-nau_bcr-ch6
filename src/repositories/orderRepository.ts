@@ -6,12 +6,17 @@ class OrderRepository {
     }
     
     async findByUser(user_id: string) {
-        return await Order.query().where('user_id', user_id).withGraphFetched('[cars, users]');
+        return await Order.query().where('user_id', user_id).withGraphFetched('[cars]');
     }
 
     async findById(id: string) {
         return await Order.query().findById(id).withGraphFetched('[cars, users]');
     }
+
+    async findByIdUser(id: string) {
+        return await Order.query().findById(id).withGraphFetched('[cars]');
+    }
+
 
     async create(
         id: string,
@@ -36,19 +41,15 @@ class OrderRepository {
 
     async update(
         id: string,
-        car_id: string,
-        user_id: string,
-        name: string,
-        email: string,
-        address: string,
-        duration: number,
-        rent_start: Date,
-        rent_end: Date,
-        total_price: number
-    ) {}
+        status: string,
+    ) {
+        const updated_at = new Date();
 
-    async delete(id: string) {
-        return await Order.query().deleteById(id);
+        await Order.query().findById(id).update({
+            id,
+            status,
+            updated_at
+        });
     }
 }
 

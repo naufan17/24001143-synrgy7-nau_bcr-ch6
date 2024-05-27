@@ -43,23 +43,15 @@ class OrderService {
 
         const formattedOrder = orders.map((order: any) => ({
             id: order.id,
+            manufacture: order.cars.manufacture,
+            model: order.cars.model,
+            type: order.cars.type,    
             duration: order.duration,
             rent_start: order.rent_start,
             rent_end: order.rent_end,
             total_price: order.total_price,
             status: order.status,
-            car: {
-                manufacture: order.cars.manufacture,
-                model: order.cars.model,
-                type: order.cars.type,    
-            },
-            user: {
-                name: order.users.name,
-                email: order.users.email,
-                address: order.users.address,    
-            },
             created_at: order.created_at,
-            updated_at: order.updated_at,
         }));
         
         return formattedOrder;
@@ -99,6 +91,32 @@ class OrderService {
         return formattedOrder;
     }
 
+    async getOrderByIdUser(id: string) {
+        const order = await OrderRepository.findByIdUser(id);
+
+        if (!order) {
+            return null;
+        }
+
+        let formattedOrder = {}
+        if(order){
+            formattedOrder = {
+                id: order.id,
+                manufacture: order.cars.manufacture,
+                model: order.cars.model,
+                type: order.cars.type,    
+                duration: order.duration,
+                rent_start: order.rent_start,
+                rent_end: order.rent_end,
+                total_price: order.total_price,
+                status: order.status,
+                created_at: order.created_at
+            };    
+        }
+        
+        return formattedOrder;
+    }
+
     async createOrder(
         car_id: string,
         user_id: string,
@@ -126,15 +144,13 @@ class OrderService {
     }
     
     async updateOrder(
-        car_id: string,
-        name: string,
-        email: string,
-        address: string,
-        duration: number,
-    ) {}
-
-    async deleteOrder(id: string) {
-        return await OrderRepository.delete(id);
+        id: string,
+        status: string,
+    ) {
+        return await OrderRepository.update(
+            id,
+            status
+        )
     }
 }
 

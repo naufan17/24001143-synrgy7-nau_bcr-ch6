@@ -18,18 +18,14 @@ router.get(
 router.post(
     '/order', 
     AuthenticateMiddleware.authenticate, 
+    AuthorizationMiddleware.authorizeUser, 
     OrderController.createOrder
 );
 router.put(
     '/order/:id', 
-    AuthenticateMiddleware.authenticate, 
-    OrderController.updateOrder
-);
-router.delete(
-    '/order/:id', 
-    AuthenticateMiddleware.authenticate, 
+    AuthenticateMiddleware.authenticate,
     AuthorizationMiddleware.authorizeAdmin, 
-    OrderController.deleteOrder
+    OrderController.updateOrder
 );
 
 export default router

@@ -29,6 +29,16 @@ class AuthorizationMiddleware extends Middleware {
             return this.handleUnauthorized(res);
         }
     }
+
+    public authorizeUser = (req: Request|any, res: Response, next: NextFunction) => {
+        const user = req.user
+
+        if (user) {
+            next();
+        } else {
+            return this.handleUnauthorized(res);
+        }
+    }
 }
 
 export default new AuthorizationMiddleware();

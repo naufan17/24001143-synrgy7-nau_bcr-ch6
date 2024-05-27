@@ -25,11 +25,18 @@ class OrderController extends Controller {
         }
     }
     
-    public getOrderById = async (req: Request, res: Response) => {
+    public getOrderById = async (req: Request|any, res: Response) => {
         const id: string = req.params.id;
+        const user = req.user;
+        const admin = req.admin;
+        let order
     
         try {
-            const order = await OrderService.getOrderById(id);
+            if (user) {
+                order = await OrderService.getOrderByIdUser(id);
+            } else if (admin) {
+                order = await OrderService.getOrderById(id);
+            }
     
             if (!order) {
                 return this.handleNotFound(res, 'Order not found');
@@ -50,15 +57,11 @@ class OrderController extends Controller {
         const user_id = user.id;
 
         try {
-            if(user){
-                await OrderService.createOrder(
-                    car_id,
-                    user_id,
-                    duration
-                );    
-            } else {
-                this.handleUnauthorized(res)
-            }
+            await OrderService.createOrder(
+                car_id,
+                user_id,
+                duration
+            );    
             
             this.handleCreated(res, 'Order created successfully');
         } catch (err) {
@@ -67,42 +70,20 @@ class OrderController extends Controller {
     };
     
     public updateOrder = async (req: Request, res: Response) => {
+        const id: string = req.params.id;
         const {
-            car_id,
-            name,
-            email,
-            address,
-            duration,
+            status,
         } = req.body;
     
         try {
             await OrderService.updateOrder(
-                car_id, 
-                name, 
-                email, 
-                address, 
-                duration
+                id,
+                status
             );
             
             this.handleCreated(res, 'Order updated successfully');
         } catch (err) {
             this.handleError(res, err, 'Failed to update order');
-        }
-    }
-    
-    public deleteOrder = async (req: Request, res: Response) => {
-        const id: string = req.params.id;
-    
-        try {
-            const order = await OrderService.deleteOrder(id);
-    
-            if (!order) {
-                return this.handleNotFound(res, 'Order not found')
-            }
-      
-            this.handleDeleted(res, 'Order deleted successfully')
-        } catch (err) {
-            this.handleError(res, err, 'Failed to delete order');
         }
     }
 }
