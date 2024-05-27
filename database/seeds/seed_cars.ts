@@ -371,7 +371,7 @@ export async function seed(knex: Knex): Promise<void> {
     const admin_1 = admins.find(admin => admin.username === 'Admin 1')
     const admin_2 = admins.find(admin => admin.username === 'Admin 2')
 
-    await knex("car_create").insert([
+    await knex("car_creates").insert([
         {
             "car_id": id_1,
             "admin_id": admin_1.id,

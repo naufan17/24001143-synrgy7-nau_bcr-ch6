@@ -24,6 +24,44 @@ class AuthenticateMiddleware extends Middleware {
             this.handleForbidden(res, 'Invalid token');
         }
     };    
+
+    public passAuthenticateUser = (req: Request|any, res: Response, next: NextFunction) => {
+        const token: string = req.header('Authorization')?.split(' ')[1];
+        
+        if (!token) {
+            return next();
+        }
+    
+        try {
+            const decoded: any = verifyToken(token);
+            req.user = decoded;
+            next();
+        } catch (err) {
+            this.handleForbidden(res, 'Invalid token');
+        }
+    };    
+
+
+    public passAuthenticateAdmin = (req: Request|any, res: Response, next: NextFunction) => {
+        const token: string = req.header('Authorization')?.split(' ')[1];
+        
+        if (!token) {
+            return next();
+        }
+    
+        try {
+            const decoded: any = verifyToken(token);
+
+            if(decoded.super_admin === true || decoded.super_admin === false) {
+                req.admin = decoded;
+                return next();
+            }
+
+            next();
+        } catch (err) {
+            this.handleForbidden(res, 'Invalid token');
+        }
+    };    
 }
 
-export default new AuthenticateMiddleware();``
+export default new AuthenticateMiddleware();

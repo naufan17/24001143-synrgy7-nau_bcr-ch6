@@ -3,9 +3,16 @@ import Controller from './Controller';
 import carService from '../services/CarService';
 
 class CarController extends Controller {
-    public getCar = async (req: Request, res: Response) => {
+    public getCar = async (req: Request|any, res: Response) => {
+        const admin = req.admin;
+        let cars;
+
         try {
-            const cars = await carService.getAllCars();
+            if (admin) {
+                cars = await carService.getAllCarsNotDeleted();
+            } else {
+                cars = await carService.getAllCars();
+            }
     
             if (!cars || cars.length === 0) {
                 return this.handleNotFound(res, 'Car not found');
@@ -17,11 +24,17 @@ class CarController extends Controller {
         }
     }
     
-    public getCarById = async (req: Request, res: Response) => {
+    public getCarById = async (req: Request|any, res: Response) => {
         const id: string = req.params.id;
+        const admin = req.admin;
+        let car;
         
         try {
-            const car = await carService.getCarById(id);
+            if (admin) {
+                car = await carService.getCarByIdNotDeleted(id);
+            } else {
+                car = await carService.getCarById(id);
+            }
     
             if (!car) {
                 return this.handleNotFound(res, 'Car not found');
@@ -33,7 +46,7 @@ class CarController extends Controller {
         }
     }
     
-    public createCar = async (req: Request, res: Response) => {
+    public createCar = async (req: Request|any, res: Response) => {
         const {
             plate,
             manufacture,
@@ -49,9 +62,11 @@ class CarController extends Controller {
             option,
             spec
         } = req.body;
+        const admin_id = req.admin.id;
         
         try {
-            await carService.createCar(        
+            await carService.createCar( 
+                admin_id,       
                 plate,
                 manufacture,
                 model,
@@ -73,7 +88,7 @@ class CarController extends Controller {
         }
     };
     
-    public updateCar = async (req: Request, res: Response) => {
+    public updateCar = async (req: Request|any, res: Response) => {
         const id: string = req.params.id;
         const {
             plate,
@@ -90,9 +105,11 @@ class CarController extends Controller {
             option,
             spec
         } = req.body;
+        const admin_id = req.admin.id;
     
         try {
-            await carService.updateCar(     
+            await carService.updateCar(
+                admin_id,     
                 id,   
                 plate,
                 manufacture,
@@ -115,11 +132,12 @@ class CarController extends Controller {
         }
     }
     
-    public deleteCar = async (req: Request, res: Response) => {
+    public deleteCar = async (req: Request|any, res: Response) => {
         const id: string = req.params.id;
+        const admin_id = req.admin.id;
     
         try {
-            const car = await carService.deleteCar(id);
+            const car = await carService.deleteCar(id, admin_id);
     
             if (!car) {
                 return this.handleNotFound(res, 'Car not found')
