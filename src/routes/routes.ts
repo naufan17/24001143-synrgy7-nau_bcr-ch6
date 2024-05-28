@@ -2,7 +2,6 @@ import { Request, Response, NextFunction } from 'express';
 import express, { Express } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs'
-import path from 'path';
 import morgan from 'morgan';
 import userRoute from './userRoute';
 import adminRoute from './adminRoute';
