@@ -26,6 +26,7 @@ class OrderService {
                 name: order.users.name,
                 email: order.users.email,
                 address: order.users.address,    
+                phone_number: order.users.phone_number,    
             },
             created_at: order.created_at,
             updated_at: order.updated_at,
@@ -81,7 +82,8 @@ class OrderService {
                 user: {
                     name: order.users.name,
                     email: order.users.email,
-                    address: order.users.address,    
+                    address: order.users.address,
+                    phone_number: order.users.phone_number,    
                 },
                 created_at: order.created_at,
                 updated_at: order.updated_at,

@@ -13,6 +13,7 @@ class AdminService {
         }
 
         const formattedAdmin = admins.map((admin: any) => ({
+            id: admin.id,
             username: admin.username,
             super_admin: admin.super_admin,
             created_at: admin.created_at,
@@ -30,6 +31,7 @@ class AdminService {
         }
 
         const formattedUser = users.map((user: any) => ({
+            id: user.id,
             name: user.name,
             email: user.email,
             address: user.address,

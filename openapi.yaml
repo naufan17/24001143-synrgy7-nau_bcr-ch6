@@ -1,0 +1,764 @@
+openapi: 3.1.0
+info:
+  title: Car Rental API
+  version: 1.0.0
+  description: API for managing car rentals and users
+servers:
+  - url: http://localhost:5000
+    description: Local server
+tags:
+  - name: Admin
+    description: Admin and Super Admin related endpoints
+  - name: User
+    description: User related endpoints
+  - name: Car
+    description: Car related endpoints
+  - name: Order
+    description: Order related endpoints
+components:
+  securitySchemes:
+    BearerToken:
+      name: Authorization
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+  schemas:
+    LoginResponse:
+      type: object
+      properties:
+        token:
+          type: string
+    Admin:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+          maxLength: 100
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CurrentAdmin:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        username:
+          type: string
+          maxLength: 100
+        super_admin:
+          type: boolean
+        iat:
+          type: number
+        exp:
+          type: number
+    LoginRegisterRequestAdmin:
+      type: object
+      properties:
+        username:
+          type: string
+          maxLength: 100
+        password:
+          type: string
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          maxLength: 100
+        address:
+          type: string
+          maxLength: 25
+        phone_number:
+          type: string
+          maxLength: 25
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    CurrentUser:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          maxLength: 100
+        iat:
+          type: number
+        exp:
+          type: number
+    RegisterRequestUser:
+      type: object
+      properties:
+        name:
+          type: string
+          maxLength: 100
+        email:
+          type: string
+          maxLength: 100
+        address:
+          type: string
+          maxLength: 25
+        phone_number:
+          type: string
+          maxLength: 25
+        password:
+          type: string
+    LoginRequestUser:
+      type: object
+      properties:
+        email:
+          type: string
+          maxLength: 100
+        password:
+          type: string
+    Car:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        plate:
+          type: string
+          maxLength: 10
+        manufacture:
+          type: string
+          maxLength: 50
+        model:
+          type: string
+          maxLength: 50
+        image:
+          type: string
+          maxLength: 255
+        capacity:
+          type: integer
+        description:
+          type: string
+        transmission:
+          type: string
+          maxLength: 20
+        type:
+          type: string
+          maxLength: 20
+        year:
+          type: integer
+        rent_price:
+          type: integer
+        available:
+          type: boolean
+        Option:
+          type: object
+          properties:
+            option:
+              type: string
+              maxLength: 50
+        Spec:
+          type: object
+          properties:
+            spec:
+              type: string
+              maxLength: 255
+    CarDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        plate:
+          type: string
+          maxLength: 10
+        manufacture:
+          type: string
+          maxLength: 50
+        model:
+          type: string
+          maxLength: 50
+        image:
+          type: string
+          maxLength: 255
+        capacity:
+          type: integer
+        description:
+          type: string
+        transmission:
+          type: string
+          maxLength: 20
+        type:
+          type: string
+          maxLength: 20
+        year:
+          type: integer
+        rent_price:
+          type: integer
+        available:
+          type: boolean
+        Option:
+          type: object
+          properties:
+            option:
+              type: string
+              maxLength: 50
+        Spec:
+          type: object
+          properties:
+            spec:
+              type: string
+              maxLength: 255
+        create:
+          type: object
+          properties:
+            admin_id:
+              type: string
+              format: uuid
+            created_at:
+              type: string
+              format: date-time
+        update:
+          type: object
+          properties:
+            admin_id:
+              type: string
+              format: uuid
+            update_at:
+              type: string
+              format: date-time
+        delete:
+          type: object
+          properties:
+            admin_id:
+              type: string
+              format: uuid
+            deleted_at:
+              type: string
+              format: date-time
+    RequestCar:
+      type: object
+      properties:
+        plate:
+          type: string
+          maxLength: 10
+        manufacture:
+          type: string
+          maxLength: 50
+        model:
+          type: string
+          maxLength: 50
+        image:
+          type: string
+          maxLength: 255
+        capacity:
+          type: integer
+        description:
+          type: string
+        transmission:
+          type: string
+          maxLength: 20
+        type:
+          type: string
+          maxLength: 20
+        year:
+          type: integer
+        rent_price:
+          type: integer
+        available:
+          type: boolean
+        Option:
+          type: object
+          properties:
+            option:
+              type: string
+              maxLength: 50
+        Spec:
+          type: object
+          properties:
+            spec:
+              type: string
+              maxLength: 255
+    RequestImageCar:
+      type: object
+      properties:
+        image:
+          type: string
+          format: binary
+    ResponseImageCar:
+      type: object
+      properties:
+        url:
+          type: string
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        manufacture:
+          type: string
+          maxLength: 50
+        model:
+          type: string
+          maxLength: 50
+        type:
+          type: string
+          maxLength: 20
+        duration:
+          type: integer
+        rent_start:
+          type: string
+          format: date-time
+        rent_end:
+          type: string
+          format: date-time
+        total_price:
+          type: integer
+        status:
+          type: string
+          maxLength: 20
+    OrderDetail:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        duration:
+          type: integer
+        rent_start:
+          type: string
+          format: date-time
+        rent_end:
+          type: string
+          format: date-time
+        total_price:
+          type: integer
+        status:
+          type: string
+          maxLength: 20
+        car:
+          type: object
+          properties:
+            manufacture:
+              type: string
+              maxLength: 50
+            model:
+              type: string
+              maxLength: 50
+            type:
+              type: string
+              maxLength: 20
+        user:
+          type: object
+          properties:
+            name:
+              type: string
+              maxLength: 100
+            email:
+              type: string
+              maxLength: 100
+            address:
+              type: string
+              maxLength: 25
+            phone_number:
+              type: string
+              maxLength: 25
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    RequestOrder:
+      type: object
+      properties:
+        car_id:
+          type: string
+          format: uuid
+        duration:
+          type: integer
+    RequestUpdateOrder:
+      type: object
+      properties:
+        car_id:
+          type: string
+          format: uuid
+        status:
+          type: string
+          maxLength: 20
+paths:
+  /admin/login:
+    post:
+      summary: Admin and Super Admin login
+      tags:
+        - Admin
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRegisterRequestAdmin'
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Admin not found
+        '500':
+          description: Login failed
+  /admin/register:
+    post:
+      summary: Register a new admin
+      tags:
+        - Admin
+      security:
+        - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRegisterRequestAdmin'
+      responses:
+        '201':
+          description: Admin created successfully
+        '404':
+          description: Admin already registered
+        '500':
+          description: Failed to create Admin
+  /admin:
+    get:
+      summary: Get current admin
+      tags:
+        - Admin
+      security:
+        - BearerToken: []
+      responses:
+        '200':
+          description: Current Admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentAdmin'
+        '401':
+          description: Unauthorized
+  /admin/admin:
+    get:
+      summary: Get all admin
+      tags:
+        - Admin
+      security:
+        - BearerToken: []
+      responses:
+        '200':
+          description: All Admin
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Admin'
+        '404':
+          description: Admin not found
+  /admin/user:
+    get:
+      summary: Get user all admin
+      tags:
+        - Admin
+      security:
+        - BearerToken: []
+      responses:
+        '200':
+          description: All User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+  /user/register:
+    post:
+      summary: Register a new user
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RegisterRequestUser'
+      responses:
+        '201':
+          description: User created successfully
+        '404':
+          description: User already registered
+        '500':
+          description: Failed to create User
+  /user/login:
+    post:
+      summary: User login
+      tags:
+        - User
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequestUser'
+      responses:
+        '200':
+          description: Login successful
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LoginResponse'
+        '404':
+          description: Admin not found
+        '500':
+          description: Login failed
+  /user:
+    get:
+      summary: Get current user
+      tags:
+        - User
+      security:
+        - BearerToken: []
+      responses:
+        '200':
+          description: Current User
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CurrentUser'
+        '401':
+          description: Unauthorized
+  /car:
+    get:
+      summary: Get all cars
+      tags:
+        - Car
+      responses:
+        '200':
+          description: List of cars
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Car'
+        '404':
+          description: Car not found
+    post:
+      summary: Create a new car
+      tags:
+        - Car
+      security:
+        - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestCar'
+      responses:
+        '201':
+          description: Car created
+        '500':
+          description: Failed to create car
+  /car/image:
+    post:
+      summary: Upload car image
+      tags:
+        - Car
+      security:
+        - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/RequestImageCar'
+      responses:
+        '201':
+          description: Image uploaded
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseImageCar'
+        '401':
+          description: Unauthorized
+        '400':
+          description: No image upload
+  /car/{id}:
+    get:
+      summary: Get car by ID
+      tags:
+        - Car
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: The car ID
+      responses:
+        '200':
+          description: Car details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CarDetail'
+        '404':
+          description: Car not found
+    put:
+      summary: Update car by ID
+      tags:
+        - Car
+      security:
+        - BearerToken: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: The car ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestCar'
+      responses:
+        '201':
+          description: Car updated
+        '401':
+          description: Unauthorized
+        '404':
+          description: Car not found
+    delete:
+      summary: Delete car by ID
+      tags:
+        - Car
+      security:
+        - BearerToken: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: The car ID
+      responses:
+        '204':
+          description: Car deleted
+        '401':
+          description: Unauthorized
+        '404':
+          description: Car not found
+  /order:
+    get:
+      summary: Get all orders
+      tags:
+        - Order
+      security:
+        - BearerToken: []
+      responses:
+        '200':
+          description: List of orders
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Order'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Order not found
+    post:
+      summary: Create a new order
+      tags:
+        - Order
+      security:
+        - BearerToken: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestOrder'
+      responses:
+        '201':
+          description: Order created to create order
+        '500':
+          description: Failed 
+  /order/{id}:
+    get:
+      summary: Get order by ID
+      tags:
+        - Order
+      security:
+        - BearerToken: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: The order ID
+      responses:
+        '200':
+          description: Order details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/OrderDetail'
+        '401':
+          description: Unauthorized
+        '404':
+          description: Order not found
+    put:
+      summary: Update order by ID
+      tags:
+        - Order
+      security:
+        - BearerToken: []
+      parameters:
+        - in: path
+          name: id
+          schema:
+            type: string
+            format: uuid
+          required: true
+          description: The order ID
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestUpdateOrder'
+      responses:
+        '201':
+          description: Order updated
+        '401':
+          description: Unauthorized
