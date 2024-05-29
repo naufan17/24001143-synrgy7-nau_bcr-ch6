@@ -17,7 +17,10 @@ class UserService {
         const validPassword = await bcrypt.compare(password, user.password);
 
         if(validPassword) {
-            const token = generateToken({ id: user.id, email: user.email });
+            const token = generateToken({ 
+                id: user.id, 
+                email: user.email 
+            });
 
             return token;
         } else {

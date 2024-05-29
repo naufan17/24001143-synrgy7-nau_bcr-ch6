@@ -23,7 +23,7 @@ class Order extends Model {
     static get relationMappings() {
         return {
             cars: {
-                relation: Model.BelongsToOneRelation,
+                relation: Model.HasOneRelation,
                 modelClass: Car,
                 join: {
                     from: 'orders.car_id',
@@ -31,7 +31,7 @@ class Order extends Model {
                 }
             },
             users: {
-                relation: Model.BelongsToOneRelation,
+                relation: Model.HasOneRelation,
                 modelClass: User,
                 join: {
                     from: 'orders.user_id',

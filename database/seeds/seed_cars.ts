@@ -2,11 +2,9 @@ import { Knex } from "knex";
 import { v4 as uuidv4 } from 'uuid';
 
 export async function seed(knex: Knex): Promise<void> {
-    // await knex("cars").del();
-    // await knex("rents").del();
-    // await knex("options").del();
-    // await knex("specs").del();
-    // await knex("car_create").del();
+    await knex("cars").del();
+    await knex("options").del();
+    await knex("specs").del();
 
     const id_1 = uuidv4();
     const id_2 = uuidv4();
@@ -18,6 +16,10 @@ export async function seed(knex: Knex): Promise<void> {
     const id_8 = uuidv4();
     const id_9 = uuidv4();
     const id_10 = uuidv4();
+
+    const admins = await knex('admins').select('id', 'username');
+    const admin_1 = admins.find(admin => admin.username === 'Admin 1')
+    const admin_2 = admins.find(admin => admin.username === 'Admin 2')
 
     await knex("cars").insert([
         {
@@ -31,6 +33,8 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Automatic",
             "type": "Sedan",
             "year": 2022,
+            "rent_price": 200000,
+            "created_by": admin_1.id,
         },
         {
             "id": id_2,
@@ -43,6 +47,8 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Automatic",
             "type": "Convertible",
             "year": 2019,
+            "rent_price": 800000,
+            "created_by": admin_1.id,
         },
         {
             "id": id_3,
@@ -55,6 +61,8 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Automanual",
             "type": "Sedan",
             "year": 2021,
+            "rent_price": 900000,
+            "created_by": admin_1.id,
         },
         {
             "id": id_4,
@@ -67,6 +75,8 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Manual",
             "type": "Coupe",
             "year": 2020,
+            "rent_price": 300000,
+            "created_by": admin_1.id,
         },
         {
             "id": id_5,
@@ -79,6 +89,8 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Automatic",
             "type": "Sedan",
             "year": 2018,
+            "rent_price": 400000,
+            "created_by": admin_1.id,
         },
         {
             "id": id_6,
@@ -91,6 +103,8 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Automatic",
             "type": "Sedan",
             "year": 2021,
+            "rent_price": 350000,
+            "created_by": admin_2.id,
         },
         {
             "id": id_7,
@@ -103,6 +117,8 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Automatic",
             "type": "Sedan",
             "year": 2021,
+            "rent_price": 700000,
+            "created_by": admin_2.id,
         },
         {
             "id": id_8,
@@ -115,6 +131,8 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Automatic",
             "type": "Sedan",
             "year": 2022,
+            "rent_price": 320000,
+            "created_by": admin_2.id,
         },
         {
             "id": id_9,
@@ -127,6 +145,8 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Automatic",
             "type": "Sedan",
             "year": 2020,
+            "rent_price": 310000,
+            "created_by": admin_2.id,
         },
         {
             "id": id_10,
@@ -139,49 +159,8 @@ export async function seed(knex: Knex): Promise<void> {
             "transmission": "Automatic",
             "type": "SUV",
             "year": 2020,
-        }
-    ]);
-
-    await knex("rents").insert([
-        {
-            "car_id": id_1,
-            "rent_price": 200000,
-        },
-        {
-            "car_id": id_2,
-            "rent_price": 800000,
-        },
-        {
-            "car_id": id_3,
-            "rent_price": 900000,
-        },
-        {
-            "car_id": id_4,
-            "rent_price": 300000,
-        },
-        {
-            "car_id": id_5,
-            "rent_price": 400000,
-        },
-        {
-            "car_id": id_6,
-            "rent_price": 350000,
-        },
-        {
-            "car_id": id_7,
-            "rent_price": 700000,
-        },
-        {
-            "car_id": id_8,
-            "rent_price": 320000,
-        },
-        {
-            "car_id": id_9,
-            "rent_price": 310000,
-        },
-        {
-            "car_id": id_10,
             "rent_price": 500000,
+            "created_by": admin_2.id,
         }
     ]);
 
@@ -364,53 +343,6 @@ export async function seed(knex: Knex): Promise<void> {
         {
             "car_id": id_10,
             "option": "Heated Seats"
-        }
-    ]);
-
-    const admins = await knex('admins').select('id', 'username');
-    const admin_1 = admins.find(admin => admin.username === 'Admin 1')
-    const admin_2 = admins.find(admin => admin.username === 'Admin 2')
-
-    await knex("car_creates").insert([
-        {
-            "car_id": id_1,
-            "admin_id": admin_1.id,
-        },
-        {
-            "car_id": id_2,
-            "admin_id": admin_1.id,
-        },
-        {
-            "car_id": id_3,
-            "admin_id": admin_1.id,
-        },
-        {
-            "car_id": id_4,
-            "admin_id": admin_1.id,
-        },
-        {
-            "car_id": id_5,
-            "admin_id": admin_1.id,
-        },
-        {
-            "car_id": id_6,
-            "admin_id": admin_2.id,
-        },
-        {
-            "car_id": id_7,
-            "admin_id": admin_2.id,
-        },
-        {
-            "car_id": id_8,
-            "admin_id": admin_2.id,
-        },
-        {
-            "car_id": id_9,
-            "admin_id": admin_2.id,
-        },
-        {
-            "car_id": id_10,
-            "admin_id": admin_2.id,
         }
     ]);
 };

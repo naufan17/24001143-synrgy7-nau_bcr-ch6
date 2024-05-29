@@ -69,7 +69,7 @@ class AdminController extends Controller {
                 password
             )
 
-            if (!admin) {
+            if (admin === null) {
                 return this.handleNotFound(res, 'Admin already registered');
             }
             
@@ -78,7 +78,6 @@ class AdminController extends Controller {
             this.handleError(res, err, 'Failed to create admin');
         }
     };
-
 }
 
 export default new AdminController();

@@ -1,6 +1,6 @@
 import { transaction } from 'objection';
 import Order from '../models/Order';
-import Rent from '../models/Rent';
+import Car from '../models/Car';
 
 class OrderRepository {
     async findAll() {
@@ -18,7 +18,6 @@ class OrderRepository {
     async findByIdUser(id: string) {
         return await Order.query().findById(id).withGraphFetched('[cars]');
     }
-
 
     async create(
         id: string,
@@ -41,7 +40,7 @@ class OrderRepository {
                 status: "Rented"
             });
 
-            await Rent.query(trx).where('car_id', car_id).update({
+            await Car.query(trx).findById(car_id).update({
                 available: false
             })
         })
@@ -63,7 +62,7 @@ class OrderRepository {
             })
 
             if(order) {
-                await Rent.query(trx).where('car_id', order.car_id).update({
+                await Car.query(trx).findById(order.car_id).update({
                     available: true
                 })
             }

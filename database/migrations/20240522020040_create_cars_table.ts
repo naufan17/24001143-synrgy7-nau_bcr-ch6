@@ -12,8 +12,13 @@ export async function up(knex: Knex): Promise<void> {
         table.string('transmission', 20);
         table.string('type', 20);
         table.integer('year', 10);
+        table.integer('rent_price', 50);
+        table.boolean('available').defaultTo(true);
+        table.uuid('created_by').references('id').inTable('admins');
         table.timestamp('created_at').defaultTo(knex.fn.now());
+        table.uuid('updated_by').references('id').inTable('admins');
         table.timestamp('updated_at');
+        table.uuid('deleted_by').references('id').inTable('admins');
         table.timestamp('deleted_at');
     })
 }

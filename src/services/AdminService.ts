@@ -56,7 +56,11 @@ class AdminService {
         const validPassword = await bcrypt.compare(password, admin.password);
 
         if(validPassword) {
-            const token = generateToken({ id: admin.id, username: admin.username, super_admin: admin.roles.super_admin });
+            const token = generateToken({ 
+                id: admin.id, 
+                username: admin.username, 
+                super_admin: admin.super_admin 
+            });
 
             return token;
         } else {
@@ -72,7 +76,7 @@ class AdminService {
         const admin =  await AdminRepository.findByUsername(username);
 
         if (admin) {
-            return false;
+            return null;
         }
 
         return await AdminRepository.create(

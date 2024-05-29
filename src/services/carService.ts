@@ -11,15 +11,19 @@ class CarService {
 
         const formattedCar = cars.map((car: any) => ({
             id: car.id,
+            plate: car.plate,
             manufacture: car.manufacture,
             model: car.model,
             image: car.image,
             capacity: car.capacity,
+            description: car.description,
             transmission: car.transmission,
             type: car.type,
             year: car.year,
-            rent_price: car.rents.rent_price,
-            available: car.rents.available,
+            rent_price: car.rent_price,
+            available: car.available,
+            option: car.options.map((option: any) => option.option),
+            spec: car.specs.map((spec: any) => spec.spec),
         }));
 
         return formattedCar;
@@ -34,15 +38,31 @@ class CarService {
 
         const formattedCar = cars.map((car: any) => ({
             id: car.id,
+            plate: car.plate,
             manufacture: car.manufacture,
             model: car.model,
             image: car.image,
             capacity: car.capacity,
+            description: car.description,
             transmission: car.transmission,
             type: car.type,
             year: car.year,
-            rent_price: car.rents.rent_price,
-            available: car.rents.available,
+            rent_price: car.rent_price,
+            available: car.available,
+            option: car.options.map((option: any) => option.option),
+            spec: car.specs.map((spec: any) => spec.spec),
+            create: {
+                admin_id: car.created_by,
+                created_at: car.created_at,
+            },
+            update: {
+                admin_id: car.updated_at,
+                updated_at: car.updated_at,
+            },
+            delete: {
+                admin_id: car.deleted_by,
+                deleted_at: car.deleted_at,
+            },
         }));
 
         return formattedCar;
@@ -69,8 +89,8 @@ class CarService {
                 transmission: car.transmission,
                 type: car.type,
                 year: car.year,
-                rent_price: car.rents.rent_price,
-                available: car.rents.available,
+                rent_price: car.rent_price,
+                available: car.available,
                 option: car.options.map((option: any) => option.option),
                 spec: car.specs.map((spec: any) => spec.spec),
             };
@@ -99,21 +119,21 @@ class CarService {
                 transmission: car.transmission,
                 type: car.type,
                 year: car.year,
-                rent_price: car.rents.rent_price,
-                available: car.rents.available,
+                rent_price: car.rent_price,
+                available: car.available,
                 option: car.options.map((option: any) => option.option),
                 spec: car.specs.map((spec: any) => spec.spec),
                 create: {
-                    admin_id: car.car_creates? car.car_creates.admin_id : null,
-                    created_at: car.car_creates? car.created_at : null,
+                    admin_id: car.created_by,
+                    created_at: car.created_at,
                 },
                 update: {
-                    admin_id: car.car_updates? car.car_updates.admin_id : null,
-                    updated_at: car.car_updates? car.updated_at : null,
+                    admin_id: car.updated_at,
+                    updated_at: car.updated_at,
                 },
                 delete: {
-                    admin_id: car.car_deletes? car.car_deletes.admin_id: null,
-                    deleted_at: car.car_deletes? car.deleted_at: null,
+                    admin_id: car.deleted_by,
+                    deleted_at: car.deleted_at,
                 },
             };
         }
@@ -133,7 +153,6 @@ class CarService {
         type: string,
         year: number,
         rent_price: number,
-        available: boolean,
         option: string,
         spec: string
     ){
@@ -152,7 +171,6 @@ class CarService {
             type,
             year,
             rent_price,
-            available,
             option,
             spec
         )

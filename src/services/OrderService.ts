@@ -131,10 +131,10 @@ class OrderService {
         let total_price = 0;
         
         if(car) {
-            if(car.rents.available === false) {
+            if(car.available === false) {
                 return null;
             } else {
-                total_price = car.rents.rent_price * duration;
+                total_price = car.rent_price * duration;
 
                 return await OrderRepository.create(
                     id,

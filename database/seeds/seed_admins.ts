@@ -3,8 +3,7 @@ import { v4 as uuidv4 } from 'uuid';
 import bcrypt from 'bcryptjs';
 
 export async function seed(knex: Knex): Promise<void> {
-    // await knex("admins").del();
-    // await knex("roles").del();
+    await knex("admins").del();
 
     const id_1 = uuidv4();
     const id_2 = uuidv4();
@@ -15,11 +14,13 @@ export async function seed(knex: Knex): Promise<void> {
         {
             "id": id_1,
             "username": "Super Admin 1",
+            "super_admin": true,
             "password": await bcrypt.hash('passwordsuperadmin', 10),
         },
         {
             "id": id_2,
             "username": "Super Admin 2",
+            "super_admin": true,
             "password": await bcrypt.hash('passwordsuperadmin', 10),
         },
         {
@@ -31,23 +32,6 @@ export async function seed(knex: Knex): Promise<void> {
             "id": id_4,
             "username": "Admin 2",
             "password": await bcrypt.hash('passwordadmin', 10),
-        },
-    ]);
-
-    await knex("roles").insert([
-        {
-            "admin_id": id_1,
-            "super_admin": true
-        },
-        {
-            "admin_id": id_2,
-            "super_admin": true
-        },
-        {
-            "admin_id": id_3,
-        },
-        {
-            "admin_id": id_4,
         },
     ]);
 };

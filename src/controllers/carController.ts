@@ -58,7 +58,6 @@ class CarController extends Controller {
             type,
             year,
             rent_price,
-            available,
             option,
             spec
         } = req.body;
@@ -77,7 +76,6 @@ class CarController extends Controller {
                 type,
                 year,
                 rent_price,
-                available,
                 option,
                 spec
             );

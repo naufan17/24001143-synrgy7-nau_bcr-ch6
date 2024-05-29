@@ -1,27 +1,23 @@
 import { transaction } from 'objection';
 import Car from '../models/Car';
-import Rent from '../models/Rent';
 import Spec from '../models/Spec';
 import Option from '../models/Option';
-import CarCreate from '../models/CarCreate';
-import CarUpdate from '../models/CarUpdate';
-import CarDelete from '../models/CarDelete';
 
 class CarRepository {
     async findAll() {
-        return await Car.query().whereNull('deleted_at').withGraphFetched('rents');
+        return await Car.query().whereNull('deleted_at').withGraphFetched('[options, specs]');
     }
 
     async findAllNotDeleted() {
-        return await Car.query().withGraphFetched('rents');
+        return await Car.query().withGraphFetched('[options, specs]');
     }
 
     async findById(id: string) {
-        return await Car.query().findById(id).whereNull('deleted_at').withGraphFetched('[rents, options, specs]');
+        return await Car.query().findById(id).whereNull('deleted_at').withGraphFetched('[options, specs]');
     }
 
     async findByIdNotDeleted(id: string) {
-        return await Car.query().findById(id).withGraphFetched('[rents, options, specs, car_creates, car_updates, car_deletes]');
+        return await Car.query().findById(id).withGraphFetched('[options, specs]');
     }
 
     async create(
@@ -37,7 +33,6 @@ class CarRepository {
         type: string,
         year: number,
         rent_price: number,
-        available: boolean,
         option: string,
         spec: string
     ){
@@ -52,19 +47,11 @@ class CarRepository {
                 description,
                 transmission,
                 type,
-                year
-            });
-
-            await Rent.query(trx).insert({
-                car_id: id,
+                year,
                 rent_price,
-                available
+                created_by: admin_id
             });
 
-            await CarCreate.query(trx).insert({
-                admin_id,
-                car_id: id,
-            });
 
             if (Array.isArray(option)) {
                 await Promise.all(option.map((opt: string) => 
@@ -126,17 +113,10 @@ class CarRepository {
                 transmission,
                 type,
                 year,
-                updated_at
-            });
-
-            await Rent.query(trx).where('car_id', id).update({
                 rent_price,
-                available
-            });
-
-            await CarUpdate.query(trx).insert({
-                admin_id,
-                car_id: id
+                available,
+                updated_by: admin_id,
+                updated_at
             });
 
             await Option.query(trx).where('car_id', id).delete();
@@ -174,16 +154,10 @@ class CarRepository {
     async delete(id: string, admin_id: string){
         const deleted_at = new Date();
 
-        return await transaction(Car.knex(), async (trx) => {
-            await Car.query().findById(id).update({
-                deleted_at
-            });
-    
-            return await CarDelete.query().insert({
-                admin_id,
-                car_id: id
-            });
-        })
+        return await Car.query().findById(id).update({
+            deleted_by: admin_id,
+            deleted_at
+        });    
     }
 }
 
