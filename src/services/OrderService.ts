@@ -124,25 +124,31 @@ class OrderService {
         user_id: string,
         duration: number,
     ) {
+        const car = await CarRepository.findById(car_id);
         const id = uuidv4();
         const rent_start = new Date();
         const rent_end = new Date(rent_start.getTime() + duration * 24 * 60 * 60 * 1000);
-        const car = await CarRepository.findById(car_id);
         let total_price = 0;
         
-        if(car){
-            total_price = car.rents.rent_price * duration;
-        }
+        if(car) {
+            if(car.rents.available === false) {
+                return null;
+            } else {
+                total_price = car.rents.rent_price * duration;
 
-        return await OrderRepository.create(
-            id,
-            car_id,
-            user_id,
-            duration,
-            rent_start,
-            rent_end,
-            total_price
-        )
+                return await OrderRepository.create(
+                    id,
+                    car_id,
+                    user_id,
+                    duration,
+                    rent_start,
+                    rent_end,
+                    total_price
+                )    
+            }
+        } else {
+            return null;
+        }
     }
     
     async updateOrder(

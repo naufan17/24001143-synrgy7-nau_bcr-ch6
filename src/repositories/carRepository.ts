@@ -9,11 +9,11 @@ import CarDelete from '../models/CarDelete';
 
 class CarRepository {
     async findAll() {
-        return await Car.query().whereNull('deleted_at').withGraphFetched('[rents]');
+        return await Car.query().whereNull('deleted_at').withGraphFetched('rents');
     }
 
     async findAllNotDeleted() {
-        return await Car.query().withGraphFetched('[rents]');
+        return await Car.query().withGraphFetched('rents');
     }
 
     async findById(id: string) {

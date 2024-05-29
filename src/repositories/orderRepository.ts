@@ -1,4 +1,6 @@
+import { transaction } from 'objection';
 import Order from '../models/Order';
+import Rent from '../models/Rent';
 
 class OrderRepository {
     async findAll() {
@@ -27,16 +29,22 @@ class OrderRepository {
         rent_end: Date,
         total_price: number
     ) {
-        await Order.query().insert({
-            id,
-            car_id,
-            user_id,
-            duration,
-            rent_start,
-            rent_end,
-            total_price,
-            status: "Rented"
-        });
+        return await transaction(Order.knex(), async (trx) => {
+            await Order.query().insert({
+                id,
+                car_id,
+                user_id,
+                duration,
+                rent_start,
+                rent_end,
+                total_price,
+                status: "Rented"
+            });
+
+            await Rent.query(trx).where('car_id', car_id).update({
+                available: false
+            })
+        })
     }
 
     async update(
@@ -45,11 +53,21 @@ class OrderRepository {
     ) {
         const updated_at = new Date();
 
-        await Order.query().findById(id).update({
-            id,
-            status,
-            updated_at
-        });
+        return await transaction(Order.knex(), async (trx) => {
+            const order = await Order.query().findById(id)
+
+            await Order.query().findById(id).update({
+                id,
+                status,
+                updated_at
+            })
+
+            if(order) {
+                await Rent.query(trx).where('car_id', order.car_id).update({
+                    available: true
+                })
+            }
+        })
     }
 }
 

@@ -57,17 +57,21 @@ class OrderController extends Controller {
         const user_id = user.id;
 
         try {
-            await OrderService.createOrder(
+            const order = await OrderService.createOrder(
                 car_id,
                 user_id,
                 duration
-            );    
+            );
+
+            if (order === null) {
+                return this.handleNotFound(res, 'Car not available');
+            }
             
             this.handleCreated(res, 'Order created successfully');
         } catch (err) {
             this.handleError(res, err, 'Failed to create order');
         }
-    };
+    }
     
     public updateOrder = async (req: Request, res: Response) => {
         const id: string = req.params.id;
