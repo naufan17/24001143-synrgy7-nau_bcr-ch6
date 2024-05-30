@@ -3,7 +3,7 @@ import Controller from './Controller';
 import UserService from '../services/UserService';
 
 class UserController extends Controller {
-    public currentUser = async (req: Request|any, res: Response) => {
+    public currentUser = async (req: Request | any, res: Response): Promise<void> => {
         const user = req.user;
 
         if(!user) {
@@ -13,7 +13,7 @@ class UserController extends Controller {
         this.handleSuccess(res, user);
     }
 
-    public loginUser = async (req: Request, res: Response) => {
+    public loginUser = async (req: Request, res: Response): Promise<void> => {
         const { email, password } = req.body;
     
         try {
@@ -23,13 +23,13 @@ class UserController extends Controller {
                 return this.handleNotFound(res, 'User not found');
             }
 
-            this.handleSuccess(res, { token: token })    
+            this.handleSuccess(res, { token })    
         } catch (err) {
             this.handleError(res, err, 'Login failed')
         }
     } 
 
-    public registerUser = async (req: Request, res: Response) => {
+    public registerUser = async (req: Request, res: Response): Promise<void> => {
         const {
             name,
             email,

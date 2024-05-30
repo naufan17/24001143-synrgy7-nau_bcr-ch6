@@ -1,5 +1,5 @@
-import multer from 'multer'; 
+import multer,  { Multer }  from 'multer'; 
 
-export const uploadImageCar = multer({ 
+export const uploadImageCar: Multer = multer({ 
     dest: 'public/images/car'
 });

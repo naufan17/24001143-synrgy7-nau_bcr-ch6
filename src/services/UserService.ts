@@ -4,10 +4,7 @@ import UserRepository from "../repositories/UserRepository";
 import { generateToken } from '../utils/jwt';
 
 class UserService {
-    async loginUser(
-        email: string, 
-        password: string
-    ){
+    async loginUser(email: string, password: string): Promise<string | null>{
         const user =  await UserRepository.findByEmail(email);
 
         if (!user) {
@@ -34,7 +31,7 @@ class UserService {
         address: string,
         phone_number: string,
         password: string
-    ){
+    ): Promise<any | boolean> {
         const id = uuidv4();
         const user =  await UserRepository.findByEmail(email);
 

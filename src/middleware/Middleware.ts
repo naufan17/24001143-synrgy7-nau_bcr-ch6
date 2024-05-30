@@ -1,19 +1,19 @@
 import { Response } from 'express';
 
 class Middleware {
-    protected handleSuccess(res: Response, data: any, message: string = 'Success') {
+    protected handleSuccess(res: Response, data: any, message: string = 'Success'): void  {
         res.status(200).json({ message, data });
     }
 
-    protected handleUnauthorized(res: Response, message: string = 'Unauthorized') {
+    protected handleUnauthorized(res: Response, message: string = 'Unauthorized'): void  {
         res.status(401).json({ message });
     }
 
-    protected handleForbidden(res: Response, message: string = 'Forbidden') {
+    protected handleForbidden(res: Response, message: string = 'Forbidden'): void  {
         res.status(403).json({ message });
     }
 
-    protected handleError(res: Response, error: any, message: string = 'An error occurred') {
+    protected handleError(res: Response, error: any, message: string = 'An error occurred'): void  {
         console.error(error);
         res.status(500).json({ message });
     }

@@ -1,22 +1,22 @@
-import { transaction } from 'objection';
+import { Transaction, transaction } from 'objection';
 import Car from '../models/Car';
 import Spec from '../models/Spec';
 import Option from '../models/Option';
 
 class CarRepository {
-    async findAll() {
+    async findAll(): Promise<Car[]> {
         return await Car.query().whereNull('deleted_at').withGraphFetched('[options, specs]');
     }
 
-    async findAllNotDeleted() {
+    async findAllNotDeleted(): Promise<Car[]> {
         return await Car.query().withGraphFetched('[options, specs]');
     }
 
-    async findById(id: string) {
+    async findById(id: string): Promise<Car | undefined> {
         return await Car.query().findById(id).whereNull('deleted_at').withGraphFetched('[options, specs]');
     }
 
-    async findByIdNotDeleted(id: string) {
+    async findByIdNotDeleted(id: string): Promise<Car | undefined> {
         return await Car.query().findById(id).withGraphFetched('[options, specs]');
     }
 
@@ -35,8 +35,8 @@ class CarRepository {
         rent_price: number,
         option: string,
         spec: string
-    ){
-        return await transaction(Car.knex(), async (trx) => {
+    ): Promise<void>{
+        return await transaction(Car.knex(), async (trx: Transaction) => {
             await Car.query(trx).insert({
                 id: id,
                 plate,
@@ -51,7 +51,6 @@ class CarRepository {
                 rent_price,
                 created_by: admin_id
             });
-
 
             if (Array.isArray(option)) {
                 await Promise.all(option.map((opt: string) => 
@@ -98,11 +97,11 @@ class CarRepository {
         rent_price: number,
         available: boolean,
         option: string,
-        spec: string
-    ){
-        const updated_at = new Date();
+        spec: string,
+        updated_at: Date
+    ): Promise<void>{
 
-        return await transaction(Car.knex(), async (trx) => {
+        return await transaction(Car.knex(), async (trx: Transaction) => {
             await Car.query(trx).findById(id).update({
                 plate,
                 manufacture,
@@ -151,9 +150,7 @@ class CarRepository {
         })
     }
 
-    async delete(id: string, admin_id: string){
-        const deleted_at = new Date();
-
+    async delete(id: string, admin_id: string, deleted_at: Date): Promise<number> {
         return await Car.query().findById(id).update({
             deleted_by: admin_id,
             deleted_at

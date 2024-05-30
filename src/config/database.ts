@@ -1,13 +1,13 @@
-import knex from "knex";
+import knex, { Knex } from "knex";
 import { Model } from 'objection';
 import knexConfig from '../../knexfile';
 
-const environment = process.env.ENVIRONMENT || 'development';
-const db = knex(knexConfig[environment]);
+const environment: string = process.env.ENVIRONMENT || 'development';
+const db: Knex = knex(knexConfig[environment]);
 
 Model.knex(db)
 
-const checkDatabaseConnection = async () => {
+const checkDatabaseConnection = async (): Promise<void> => {
     try {
         await db.raw('SELECT 1+1 AS result');
         console.log('Database connection has been established successfully.');

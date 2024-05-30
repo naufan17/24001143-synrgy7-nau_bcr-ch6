@@ -2,35 +2,27 @@ import { Request, Response, NextFunction } from 'express';
 import Middleware from './Middleware';
 
 class AuthorizationMiddleware extends Middleware {
-    public authorizeAdmin = (req: Request|any, res: Response, next: NextFunction) => {
+    public authorizeAdmin = (req: Request | any, res: Response, next: NextFunction): void => {
         const admin = req.admin
 
-        if (admin) {
-            if (admin.super_admin === true || admin.super_admin === false) {
-                next();
-            } else {
-                return this.handleUnauthorized(res);
-            }
+        if (admin && (admin.super_admin === true || admin.super_admin === false)) {
+            next();
         } else {
             return this.handleUnauthorized(res);
         }
     }
 
-    public authorizeSuperAdmin = (req: Request|any, res: Response, next: NextFunction) => {
+    public authorizeSuperAdmin = (req: Request | any, res: Response, next: NextFunction): void => {
         const admin = req.admin
 
-        if (admin) {
-            if (admin.super_admin === true) {
-                next();
-            } else {
-                return this.handleUnauthorized(res);
-            }
+        if (admin && admin.super_admin === true) {
+            next();
         } else {
             return this.handleUnauthorized(res);
         }
     }
 
-    public authorizeUser = (req: Request|any, res: Response, next: NextFunction) => {
+    public authorizeUser = (req: Request | any, res: Response, next: NextFunction): void => {
         const user = req.user
 
         if (user) {

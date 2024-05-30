@@ -2,11 +2,11 @@ import bcrypt from 'bcryptjs';
 import User from '../models/User';
 
 class UserRepository {
-    async findAll() {
+    async findAll(): Promise<User[]> {
         return await User.query();
     }
 
-    async findByEmail(email: string) {
+    async findByEmail(email: string): Promise<User | undefined> {
         return await User.query().findOne({ email });
     }
 
@@ -17,7 +17,7 @@ class UserRepository {
         address: string,
         phone_number: string,
         password: string
-    ) {
+    ): Promise<User> {
         return await User.query().insert({
             id,
             name,

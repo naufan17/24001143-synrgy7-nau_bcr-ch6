@@ -3,7 +3,7 @@ import Controller from './Controller'
 import UploadImageService  from '../services/UploadImageService';
 
 class ImageController extends Controller {
-    public uploadImageCar = async (req: Request, res: Response) => {
+    public uploadImageCar = async (req: Request, res: Response): Promise<void> => {
         const fileImage = req.file;
 
         if (!fileImage) {
@@ -17,7 +17,6 @@ class ImageController extends Controller {
             this.handleError(res, err, 'Error uploading image')
         }
     }
-    
 }
 
 export default new ImageController();

@@ -3,7 +3,7 @@ import Controller from './Controller';
 import carService from '../services/CarService';
 
 class CarController extends Controller {
-    public getCar = async (req: Request|any, res: Response) => {
+    public getCar = async (req: Request | any, res: Response): Promise<void> => {
         const admin = req.admin;
         let cars;
 
@@ -24,7 +24,7 @@ class CarController extends Controller {
         }
     }
     
-    public getCarById = async (req: Request|any, res: Response) => {
+    public getCarById = async (req: Request | any, res: Response): Promise<void> => {
         const id: string = req.params.id;
         const admin = req.admin;
         let car;
@@ -46,7 +46,7 @@ class CarController extends Controller {
         }
     }
     
-    public createCar = async (req: Request|any, res: Response) => {
+    public createCar = async (req: Request | any, res: Response): Promise<void> => {
         const {
             plate,
             manufacture,
@@ -61,7 +61,7 @@ class CarController extends Controller {
             option,
             spec
         } = req.body;
-        const admin_id = req.admin.id;
+        const admin_id: string = req.admin.id;
         
         try {
             await carService.createCar( 
@@ -86,7 +86,7 @@ class CarController extends Controller {
         }
     };
     
-    public updateCar = async (req: Request|any, res: Response) => {
+    public updateCar = async (req: Request|any, res: Response): Promise<void> => {
         const id: string = req.params.id;
         const {
             plate,
@@ -103,7 +103,7 @@ class CarController extends Controller {
             option,
             spec
         } = req.body;
-        const admin_id = req.admin.id;
+        const admin_id: string = req.admin.id;
     
         try {
             await carService.updateCar(
@@ -130,9 +130,9 @@ class CarController extends Controller {
         }
     }
     
-    public deleteCar = async (req: Request|any, res: Response) => {
+    public deleteCar = async (req: Request|any, res: Response): Promise<void> => {
         const id: string = req.params.id;
-        const admin_id = req.admin.id;
+        const admin_id: string = req.admin.id;
     
         try {
             const car = await carService.deleteCar(id, admin_id);

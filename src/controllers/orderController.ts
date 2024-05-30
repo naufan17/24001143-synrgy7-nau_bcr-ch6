@@ -3,7 +3,7 @@ import Controller from './Controller';
 import OrderService from '../services/OrderService';
 
 class OrderController extends Controller {
-    public getOrder = async (req: Request|any, res: Response) => {
+    public getOrder = async (req: Request | any, res: Response): Promise<void> => {
         const user = req.user;
         const admin = req.admin;
         let orders;
@@ -19,13 +19,13 @@ class OrderController extends Controller {
                 return this.handleNotFound(res, 'Order not found');
             }
         
-            this.handleSuccess(res, { orders: orders })
+            this.handleSuccess(res, { orders })
         } catch (err) {
             this.handleError(res, err, 'Failed to fetch order');
         }
     }
     
-    public getOrderById = async (req: Request|any, res: Response) => {
+    public getOrderById = async (req: Request | any, res: Response): Promise<void> => {
         const id: string = req.params.id;
         const user = req.user;
         const admin = req.admin;
@@ -33,7 +33,7 @@ class OrderController extends Controller {
     
         try {
             if (user) {
-                order = await OrderService.getOrderByIdUser(id);
+                order = await OrderService.getOrderByIdUser(id, user.id);
             } else if (admin) {
                 order = await OrderService.getOrderById(id);
             }
@@ -48,13 +48,13 @@ class OrderController extends Controller {
         }
     }
     
-    public createOrder = async (req: Request|any, res: Response) => {
+    public createOrder = async (req: Request | any, res: Response): Promise<void> => {
         const {
             car_id,
             duration,
         } = req.body;
         const user = req.user;
-        const user_id = user.id;
+        const user_id: string = user.id;
 
         try {
             const order = await OrderService.createOrder(
@@ -73,7 +73,7 @@ class OrderController extends Controller {
         }
     }
     
-    public updateOrder = async (req: Request, res: Response) => {
+    public updateOrder = async (req: Request, res: Response): Promise<void> => {
         const id: string = req.params.id;
         const {
             status,

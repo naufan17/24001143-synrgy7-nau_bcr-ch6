@@ -1,21 +1,21 @@
-import { transaction } from 'objection';
+import { transaction, Transaction } from 'objection';
 import Order from '../models/Order';
 import Car from '../models/Car';
 
 class OrderRepository {
-    async findAll() {
+    async findAll(): Promise<Order[]> {
         return await Order.query().withGraphFetched('[cars, users]');
     }
     
-    async findByUser(user_id: string) {
+    async findByUser(user_id: string): Promise<Order[]> {
         return await Order.query().where('user_id', user_id).withGraphFetched('[cars]');
     }
 
-    async findById(id: string) {
+    async findById(id: string): Promise<Order | undefined> {
         return await Order.query().findById(id).withGraphFetched('[cars, users]');
     }
 
-    async findByIdUser(id: string) {
+    async findByIdUser(id: string): Promise<Order | undefined> {
         return await Order.query().findById(id).withGraphFetched('[cars]');
     }
 
@@ -27,8 +27,8 @@ class OrderRepository {
         rent_start: Date,
         rent_end: Date,
         total_price: number
-    ) {
-        return await transaction(Order.knex(), async (trx) => {
+    ): Promise<void> {
+        return await transaction(Order.knex(), async (trx: Transaction) => {
             await Order.query().insert({
                 id,
                 car_id,
@@ -46,22 +46,17 @@ class OrderRepository {
         })
     }
 
-    async update(
-        id: string,
-        status: string,
-    ) {
-        const updated_at = new Date();
-
-        return await transaction(Order.knex(), async (trx) => {
+    async update(id: string, status: string, updated_at: Date): Promise<void> {
+        return await transaction(Order.knex(), async (trx: Transaction) => {
             const order = await Order.query().findById(id)
 
-            await Order.query().findById(id).update({
-                id,
-                status,
-                updated_at
-            })
-
             if(order) {
+                await Order.query().findById(id).update({
+                    id,
+                    status,
+                    updated_at
+                })
+    
                 await Car.query(trx).findById(order.car_id).update({
                     available: true
                 })

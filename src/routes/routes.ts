@@ -1,4 +1,4 @@
-import { Request, Response, NextFunction } from 'express';
+import { Request, Response } from 'express';
 import express, { Express } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs'
@@ -22,7 +22,7 @@ app.use('/api', userRoute);
 app.use('/api', carRoute);
 app.use('/api', orderRoute);
 
-app.use((req: Request, res: Response, next: NextFunction) => {
+app.use((req: Request, res: Response) => {
     res.status(404).json({ error: 'Route Not Found' });
 });
 

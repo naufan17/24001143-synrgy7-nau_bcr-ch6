@@ -3,7 +3,7 @@ import Controller from './Controller';
 import AdminService from '../services/AdminService';
 
 class AdminController extends Controller {    
-    public currentAdmin = async (req: Request|any, res: Response) => {
+    public currentAdmin = async (req: Request | any, res: Response): Promise<void> => {
         const admin = req.admin;
 
         if(!admin) {
@@ -13,7 +13,7 @@ class AdminController extends Controller {
         this.handleSuccess(res, admin)
     }
 
-    public getAdmin = async (req: Request, res: Response) => {
+    public getAdmin = async (req: Request, res: Response): Promise<void> => {
         try {
             const admins = await AdminService.getAllAdmin();
 
@@ -27,7 +27,7 @@ class AdminController extends Controller {
         }
     }
 
-    public getUser = async (req: Request, res: Response) => {
+    public getUser = async (req: Request, res: Response): Promise<void> => {
         try {
             const users = await AdminService.getAllUser();
 
@@ -41,7 +41,7 @@ class AdminController extends Controller {
         }
     }
 
-    public loginAdmin = async (req: Request, res: Response) => {
+    public loginAdmin = async (req: Request, res: Response): Promise<void> => {
         const { username, password } = req.body;
     
         try {
@@ -51,13 +51,13 @@ class AdminController extends Controller {
                 return this.handleNotFound(res, 'Admin not found');
             }
 
-            this.handleSuccess(res, { token: token })    
+            this.handleSuccess(res, { token })    
         } catch (err) {
             this.handleError(res, err, 'Login failed')
         }
     };    
 
-    public registerAdmin = async (req: Request, res: Response) => {
+    public registerAdmin = async (req: Request, res: Response): Promise<void> => {
         const {
             username,
             password

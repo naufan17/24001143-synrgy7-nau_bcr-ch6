@@ -3,8 +3,8 @@ import { verifyToken } from '../utils/jwt';
 import Middleware from './Middleware'
 
 class AuthenticateMiddleware extends Middleware {
-    public authenticate = (req: Request|any, res: Response, next: NextFunction) => {
-        const token: string = req.header('Authorization')?.split(' ')[1];
+    public authenticate = (req: Request | any, res: Response, next: NextFunction): void => {
+        const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {
             return this.handleUnauthorized(res);
@@ -13,7 +13,7 @@ class AuthenticateMiddleware extends Middleware {
         try {
             const decoded: any = verifyToken(token);
 
-            if(decoded.super_admin === true || decoded.super_admin === false) {
+            if(decoded.super_admin !== undefined) {
                 req.admin = decoded;
                 next();
             } else {
@@ -25,8 +25,8 @@ class AuthenticateMiddleware extends Middleware {
         }
     };    
 
-    public passAuthenticateUser = (req: Request|any, res: Response, next: NextFunction) => {
-        const token: string = req.header('Authorization')?.split(' ')[1];
+    public passAuthenticateUser = (req: Request | any, res: Response, next: NextFunction): void => {
+        const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {
             return next();
@@ -42,8 +42,8 @@ class AuthenticateMiddleware extends Middleware {
     };    
 
 
-    public passAuthenticateAdmin = (req: Request|any, res: Response, next: NextFunction) => {
-        const token: string = req.header('Authorization')?.split(' ')[1];
+    public passAuthenticateAdmin = (req: Request|any, res: Response, next: NextFunction): void => {
+        const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {
             return next();
@@ -52,7 +52,7 @@ class AuthenticateMiddleware extends Middleware {
         try {
             const decoded: any = verifyToken(token);
 
-            if(decoded.super_admin === true || decoded.super_admin === false) {
+            if(decoded.super_admin !== undefined) {
                 req.admin = decoded;
                 return next();
             }

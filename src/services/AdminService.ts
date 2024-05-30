@@ -4,15 +4,33 @@ import AdminRepository from "../repositories/AdminRepository";
 import UserRepository from "../repositories/UserRepository";
 import { generateToken } from '../utils/jwt';
 
+interface FormattedAdmin {
+    id: string;
+    username: string;
+    super_admin: boolean;
+    created_at: Date;
+    updated_at: Date;
+}
+
+interface FormattedUser {
+    id: string;
+    name: string;
+    email: string;
+    address: string;
+    phone_number: string;
+    created_at: Date;
+    updated_at: Date;
+}
+
 class AdminService {
-    async getAllAdmin() {
+    async getAllAdmin(): Promise<FormattedAdmin[] | null>  {
         const admins = await AdminRepository.findAll();
 
         if(!admins) {
             return null;
         }
 
-        const formattedAdmin = admins.map((admin: any) => ({
+        const formattedAdmin: FormattedAdmin[] = admins.map((admin: any) => ({
             id: admin.id,
             username: admin.username,
             super_admin: admin.super_admin,
@@ -23,14 +41,14 @@ class AdminService {
         return formattedAdmin;
     }
 
-    async getAllUser() {
+    async getAllUser(): Promise<FormattedUser[] | null>  {
         const users = await UserRepository.findAll();
 
         if(!users) {
             return null;
         }
 
-        const formattedUser = users.map((user: any) => ({
+        const formattedUser: FormattedUser[] = users.map((user: any) => ({
             id: user.id,
             name: user.name,
             email: user.email,
@@ -43,10 +61,7 @@ class AdminService {
         return formattedUser;
     }
 
-    async loginAdmin(
-        username: string, 
-        password: string
-    ){
+    async loginAdmin(username: string, password: string): Promise<string | null>{
         const admin =  await AdminRepository.findByUsername(username);
 
         if (!admin) {
@@ -68,11 +83,8 @@ class AdminService {
         }
     }
 
-    async registerAdmin(
-        username: string,
-        password: string
-    ){
-        const id = uuidv4();
+    async registerAdmin(username: string, password: string): Promise<any | null>{
+        const id: string = uuidv4();
         const admin =  await AdminRepository.findByUsername(username);
 
         if (admin) {
