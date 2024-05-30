@@ -9,7 +9,7 @@ class CarRepository {
     }
 
     async findAllNotDeleted(): Promise<Car[]> {
-        return await Car.query().withGraphFetched('[options, specs]');
+        return await Car.query().withGraphFetched('[options, specs, createdByAdmin, updatedByAdmin, deletedByAdmin]');
     }
 
     async findById(id: string): Promise<Car | undefined> {
@@ -17,7 +17,7 @@ class CarRepository {
     }
 
     async findByIdNotDeleted(id: string): Promise<Car | undefined> {
-        return await Car.query().findById(id).withGraphFetched('[options, specs]');
+        return await Car.query().findById(id).withGraphFetched('[options, specs, createdByAdmin, updatedByAdmin, deletedByAdmin]');
     }
 
     async create(
@@ -52,33 +52,17 @@ class CarRepository {
                 created_by: admin_id
             });
 
-            if (Array.isArray(option)) {
-                await Promise.all(option.map((opt: string) => 
-                    Option.query(trx).insert({
-                        car_id: id,
-                        option: opt
-                    })
-                ));
-            } else {
-                await Option.query(trx).insert({
-                    car_id: id,
-                    option
-                })
-            }
+            const optionsArray = Array.isArray(option) ? option : [option];
+            const specsArray = Array.isArray(spec) ? spec : [spec];
 
-            if (Array.isArray(spec)) {
-                await Promise.all(spec.map((sp: string) => 
-                    Spec.query(trx).insert({
-                        car_id: id,
-                        spec: sp
-                    })
-                ));
-            } else {
-                await Spec.query(trx).insert({
-                    car_id: id,
-                    spec
-                })
-            }
+            await Promise.all([
+                ...optionsArray.map((opt: string) =>
+                    Option.query(trx).insert({ car_id: id, option: opt })
+                ),
+                ...specsArray.map((sp: string) =>
+                    Spec.query(trx).insert({ car_id: id, spec: sp })
+                )
+            ]);
         });
     }
 
@@ -118,34 +102,25 @@ class CarRepository {
                 updated_at
             });
 
-            await Option.query(trx).where('car_id', id).delete();
-            if (Array.isArray(option)) {
-                await Promise.all(option.map((opt: string) => 
-                    Option.query(trx).insert({ 
-                        car_id: id,
-                        option: opt 
-                    })
-                ));
-            } else {
-                await Option.query(trx).insert({ 
-                    car_id: id,
-                    option 
-                });
+            const optionsArray = Array.isArray(option) ? option : [option];
+            const specsArray = Array.isArray(spec) ? spec : [spec];
+
+            if (optionsArray.length > 0 && optionsArray[0]){
+                await Option.query(trx).where('car_id', id).delete();
+                await Promise.all([
+                    ...optionsArray.map((opt: string) =>
+                        Option.query(trx).insert({ car_id: id, option: opt })
+                    ),
+                ]);
             }
 
-            await Spec.query(trx).where('car_id', id).delete();
-            if (Array.isArray(spec)) {
-                await Promise.all(spec.map((sp: string) => 
-                    Spec.query(trx).insert({ 
-                        car_id: id,
-                        spec: sp 
-                    })
-                ));
-            } else {
-                await Spec.query(trx).insert({ 
-                    car_id: id,
-                    spec 
-                });
+            if (specsArray.length > 0 && specsArray[0]){
+                await Spec.query(trx).where('car_id', id).delete();
+                await Promise.all([
+                    ...specsArray.map((sp: string) =>
+                        Spec.query(trx).insert({ car_id: id, spec: sp })
+                    )
+                ]);
             }
         })
     }

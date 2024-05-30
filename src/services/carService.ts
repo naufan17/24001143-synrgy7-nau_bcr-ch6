@@ -34,15 +34,15 @@ interface FormattedCarDetail {
     option: string[];
     spec: string[];
     create: {
-        created_by: string;
+        created_by: string | null;
         created_at: Date;
     };
     update: {
-        updated_by: string;
+        updated_by: string | null;
         updated_at: Date;
     };
     delete: {
-        deleted_by: string;
+        deleted_by: string | null;
         deleted_at: Date;
     };
 }
@@ -75,7 +75,7 @@ class CarService {
         return formattedCar;
     }
 
-    async getAllCarsNotDeleted(): Promise<FormattedCarDetail[] | null> {
+    async getAllCarsNotDeleted() {
         const cars = await CarRepository.findAllNotDeleted();
 
         if (!cars) {
@@ -98,15 +98,15 @@ class CarService {
             option: car.options.map((option: any) => option.option),
             spec: car.specs.map((spec: any) => spec.spec),
             create: {
-                created_by: car.created_by,
+                created_by: car.createdByAdmin ? car.createdByAdmin.username : null,
                 created_at: car.created_at,
             },
             update: {
-                updated_by: car.updated_at,
+                updated_by: car.updatedByAdmin ? car.updatedByAdmin.username : null,
                 updated_at: car.updated_at,
             },
             delete: {
-                deleted_by: car.deleted_by,
+                deleted_by: car.deletedByAdmin ? car.deletedByAdmin.username : null,
                 deleted_at: car.deleted_at,
             },
         }));
@@ -164,15 +164,15 @@ class CarService {
             option: car.options.map((option: any) => option.option),
             spec: car.specs.map((spec: any) => spec.spec),
             create: {
-                created_by: car.created_by,
+                created_by: car.createdByAdmin ? car.createdByAdmin.username : null,
                 created_at: car.created_at,
             },
             update: {
-                updated_by: car.updated_by,
+                updated_by: car.updatedByAdmin ? car.updatedByAdmin.username : null,
                 updated_at: car.updated_at,
             },
             delete: {
-                deleted_by: car.deleted_by,
+                deleted_by: car.deletedByAdmin ? car.deletedByAdmin.username : null,
                 deleted_at: car.deleted_at,
             },
         }
