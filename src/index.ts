@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs'
 import morgan from 'morgan';
 import routes from './routes/routes';
+import cors from 'cors';
 import './config/database';
 
 const openAPIDocument = YAML.load('././openapi.yaml');
@@ -15,7 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(morgan('combined'));
 
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openAPIDocument));
-app.use('/api', routes)
+app.use('/api', cors(), routes)
 
 app.use((req: Request, res: Response) => {
     res.status(404).json({ error: 'Route Not Found' });
