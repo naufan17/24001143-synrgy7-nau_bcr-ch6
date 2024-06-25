@@ -15,9 +15,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('combined'));
 
-app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openAPIDocument));
+// Routes
 app.use('/api', cors(), routes)
-
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openAPIDocument));
 app.use((req: Request, res: Response) => {
     res.status(404).json({ error: 'Route Not Found' });
 });

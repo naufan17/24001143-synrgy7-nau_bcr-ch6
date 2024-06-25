@@ -9,10 +9,12 @@ router.get(
     AuthenticateMiddleware.authenticate, 
     UserController.currentUser
 );
+
 router.post(
     '/user/register', 
     UserController.registerUser
 );
+
 router.post(
     '/user/login', 
     UserController.loginUser
