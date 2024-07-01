@@ -9,7 +9,7 @@ class CarRepository {
     }
 
     async findAllNotDeleted(): Promise<Car[]> {
-        return await Car.query().withGraphFetched('[options, specs, createdByAdmin, updatedByAdmin, deletedByAdmin]');
+        return await Car.query().withGraphFetched('[options, specs]');
     }
 
     async findById(id: string): Promise<Car | undefined> {
@@ -17,7 +17,7 @@ class CarRepository {
     }
 
     async findByIdNotDeleted(id: string): Promise<Car | undefined> {
-        return await Car.query().findById(id).withGraphFetched('[options, specs, createdByAdmin, updatedByAdmin, deletedByAdmin]');
+        return await Car.query().findById(id).withGraphFetched('[options, specs]');
     }
 
     async create(
@@ -125,11 +125,13 @@ class CarRepository {
         })
     }
 
-    async delete(id: string, admin_id: string, deleted_at: Date): Promise<number> {
-        return await Car.query().findById(id).update({
-            deleted_by: admin_id,
-            deleted_at
-        });    
+    async delete(id: string, admin_id: string, deleted_at: Date): Promise<void> {
+        return await transaction(Car.knex(), async (trx: Transaction) => {
+            await Car.query(trx).findById(id).update({
+                deleted_by: admin_id,
+                deleted_at
+            })
+        })
     }
 }
 

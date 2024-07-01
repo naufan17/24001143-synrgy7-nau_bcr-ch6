@@ -10,7 +10,7 @@ class AdminService {
     async getAllAdmin(): Promise<FormattedAdmin[] | null>  {
         const admins = await AdminRepository.findAll();
 
-        if(!admins) {
+        if (!admins) {
             return null;
         }
 
@@ -28,7 +28,7 @@ class AdminService {
     async getAllUser(): Promise<FormattedUser[] | null>  {
         const users = await UserRepository.findAll();
 
-        if(!users) {
+        if (!users) {
             return null;
         }
 
@@ -54,17 +54,17 @@ class AdminService {
 
         const validPassword = await bcrypt.compare(password, admin.password);
 
-        if(validPassword) {
-            const token = generateToken({ 
-                id: admin.id, 
-                username: admin.username, 
-                super_admin: admin.super_admin 
-            });
-
-            return token;
-        } else {
+        if (!validPassword) {
             return null;
         }
+
+        const token = generateToken({ 
+            id: admin.id, 
+            username: admin.username, 
+            super_admin: admin.super_admin 
+        });
+
+        return token;
     }
 
     async registerAdmin(username: string, password: string): Promise<void | null>{

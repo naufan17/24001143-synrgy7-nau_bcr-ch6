@@ -39,6 +39,8 @@ class UserService {
             return null;
         }
 
+        password = await bcrypt.hash(password, 10);
+
         return await UserRepository.create(
             id, 
             name, 

@@ -10,7 +10,7 @@ class OrderController extends Controller {
         let orders;
 
         try {
-            if(user) {
+            if (user) {
                 orders = await OrderService.getOrderByUser(user.id);
             } else if (admin) {
                 orders = await OrderService.getAllOrders();
@@ -30,7 +30,7 @@ class OrderController extends Controller {
         const id: string = req.params.id;
         const user = req.user;
         const admin = req.admin;
-        let order
+        let order;
     
         try {
             if (user) {
@@ -50,10 +50,7 @@ class OrderController extends Controller {
     }
     
     public createOrder = async (req: UserRequest, res: Response): Promise<void> => {
-        const {
-            car_id,
-            duration,
-        } = req.body;
+        const { car_id, duration } = req.body;
         const user = req.user;
 
         try {
@@ -66,7 +63,7 @@ class OrderController extends Controller {
                     duration
                 );
     
-                if (order === null) {
+                if (!order) {
                     return this.handleNotFound(res, 'Car not available');
                 }
             }
@@ -79,15 +76,10 @@ class OrderController extends Controller {
     
     public updateOrder = async (req: AdminRequest, res: Response): Promise<void> => {
         const id: string = req.params.id;
-        const {
-            status,
-        } = req.body;
+        const { status } = req.body;
     
         try {
-            await OrderService.updateOrder(
-                id,
-                status
-            );
+            await OrderService.updateOrder( id, status );
             
             this.handleCreated(res, 'Order updated successfully');
         } catch (err) {

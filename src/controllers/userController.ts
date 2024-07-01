@@ -21,12 +21,12 @@ class UserController extends Controller {
             const token = await UserService.loginUser(email, password);
             
             if (!token) {
-                return this.handleNotFound(res, 'User not found');
+                return this.handleNotFound(res, 'Email and password not valid');
             }
 
             this.handleSuccess(res, { token })    
         } catch (err) {
-            this.handleError(res, err, 'Login failed')
+            this.handleError(res, err, 'Failed to login user')
         }
     } 
 

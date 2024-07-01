@@ -49,26 +49,20 @@ class AdminController extends Controller {
             const token = await AdminService.loginAdmin(username, password);
             
             if (!token) {
-                return this.handleNotFound(res, 'Admin not found');
+                return this.handleNotFound(res, 'Username and password not valid');
             }
 
             this.handleSuccess(res, { token })    
         } catch (err) {
-            this.handleError(res, err, 'Login failed')
+            this.handleError(res, err, 'Failed to login admin')
         }
     };    
 
     public registerAdmin = async (req: Request, res: Response): Promise<void> => {
-        const {
-            username,
-            password
-        } = req.body;
+        const { username, password } = req.body;
     
         try {
-            const admin = await AdminService.registerAdmin(
-                username, 
-                password
-            )
+            const admin = await AdminService.registerAdmin(username, password);
 
             if (!admin) {
                 return this.handleNotFound(res, 'Admin already registered');
@@ -76,7 +70,7 @@ class AdminController extends Controller {
             
             this.handleCreated(res, 'Admin created successfully');
         } catch (err) {
-            this.handleError(res, err, 'Failed to create admin');
+            this.handleError(res, err, 'Failed to register admin');
         }
     };
 }

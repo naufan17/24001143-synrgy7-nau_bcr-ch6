@@ -29,7 +29,7 @@ class OrderRepository {
         total_price: number
     ): Promise<void> {
         return await transaction(Order.knex(), async (trx: Transaction) => {
-            await Order.query().insert({
+            await Order.query(trx).insert({
                 id,
                 car_id,
                 user_id,
@@ -48,10 +48,10 @@ class OrderRepository {
 
     async update(id: string, status: string, updated_at: Date): Promise<void> {
         return await transaction(Order.knex(), async (trx: Transaction) => {
-            const order = await Order.query().findById(id)
+            const order = await Order.query(trx).findById(id)
 
             if(order) {
-                await Order.query().findById(id).update({
+                await Order.query(trx).findById(id).update({
                     id,
                     status,
                     updated_at
