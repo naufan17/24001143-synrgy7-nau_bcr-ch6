@@ -13,16 +13,16 @@ class UserService {
 
         const validPassword = await bcrypt.compare(password, user.password);
 
-        if(validPassword) {
-            const token = generateToken({ 
-                id: user.id, 
-                email: user.email 
-            });
-
-            return token;
-        } else {
+        if (!validPassword) {
             return null;
         }
+
+        const token = generateToken({ 
+            id: user.id, 
+            email: user.email 
+        });
+
+        return token;
     }
 
     async registerUser(
@@ -31,12 +31,12 @@ class UserService {
         address: string,
         phone_number: string,
         password: string
-    ): Promise<any | boolean> {
+    ): Promise<void | null> {
         const id = uuidv4();
         const user =  await UserRepository.findByEmail(email);
 
         if (user) {
-            return false;
+            return null;
         }
 
         return await UserRepository.create(

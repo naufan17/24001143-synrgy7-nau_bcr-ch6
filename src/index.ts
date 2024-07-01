@@ -15,7 +15,6 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(morgan('combined'));
 
-// Routes
 app.use('/api', cors(), routes)
 app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(openAPIDocument));
 app.use((req: Request, res: Response) => {

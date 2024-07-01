@@ -40,7 +40,7 @@ router.put(
     AuthorizationMiddleware.authorizeAdmin, 
     CarController.updateCar);
 
-    router.delete(
+router.delete(
     '/car/:id', 
     AuthenticateMiddleware.authenticate, 
     AuthorizationMiddleware.authorizeAdmin, 

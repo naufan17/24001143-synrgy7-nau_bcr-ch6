@@ -1,9 +1,12 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import { verifyToken } from '../utils/jwt';
 import Middleware from './Middleware'
+import { AdminOrUserRequest } from '../interfaces/AuthRequest';
+import { Admin } from '../interfaces/Admin';
+import { User } from '../interfaces/User';
 
 class AuthenticateMiddleware extends Middleware {
-    public authenticate = (req: Request | any, res: Response, next: NextFunction): void => {
+    public authenticate = (req: AdminOrUserRequest, res: Response, next: NextFunction): void => {
         const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {
@@ -11,21 +14,22 @@ class AuthenticateMiddleware extends Middleware {
         }
     
         try {
-            const decoded: any = verifyToken(token);
+            const decoded = verifyToken(token) as Admin | User;
 
-            if(decoded.super_admin !== undefined) {
-                req.admin = decoded;
+            if('super_admin' in decoded) {
+                req.admin = decoded as Admin;
                 next();
             } else {
-                req.user = decoded;
+                req.user = decoded as User;
                 next();
             }
+
         } catch (err) {
             this.handleForbidden(res, 'Invalid token');
         }
     };    
 
-    public passAuthenticateUser = (req: Request | any, res: Response, next: NextFunction): void => {
+    public passAuthenticateUser = (req: AdminOrUserRequest, res: Response, next: NextFunction): void => {
         const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {
@@ -33,7 +37,7 @@ class AuthenticateMiddleware extends Middleware {
         }
     
         try {
-            const decoded: any = verifyToken(token);
+            const decoded = verifyToken(token) as User;
             req.user = decoded;
             next();
         } catch (err) {
@@ -42,7 +46,7 @@ class AuthenticateMiddleware extends Middleware {
     };    
 
 
-    public passAuthenticateAdmin = (req: Request|any, res: Response, next: NextFunction): void => {
+    public passAuthenticateAdmin = (req: AdminOrUserRequest, res: Response, next: NextFunction): void => {
         const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {
@@ -50,7 +54,7 @@ class AuthenticateMiddleware extends Middleware {
         }
     
         try {
-            const decoded: any = verifyToken(token);
+            const decoded = verifyToken(token) as Admin;
 
             if(decoded.super_admin !== undefined) {
                 req.admin = decoded;

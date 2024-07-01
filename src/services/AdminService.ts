@@ -3,24 +3,8 @@ import bcrypt from 'bcryptjs';
 import AdminRepository from "../repositories/AdminRepository";
 import UserRepository from "../repositories/UserRepository";
 import { generateToken } from '../utils/jwt';
-
-interface FormattedAdmin {
-    id: string;
-    username: string;
-    super_admin: boolean;
-    created_at: Date;
-    updated_at: Date;
-}
-
-interface FormattedUser {
-    id: string;
-    name: string;
-    email: string;
-    address: string;
-    phone_number: string;
-    created_at: Date;
-    updated_at: Date;
-}
+import { FormattedAdmin } from '../interfaces/Admin';
+import { FormattedUser } from '../interfaces/User';
 
 class AdminService {
     async getAllAdmin(): Promise<FormattedAdmin[] | null>  {
@@ -30,7 +14,7 @@ class AdminService {
             return null;
         }
 
-        const formattedAdmin: FormattedAdmin[] = admins.map((admin: any) => ({
+        const formattedAdmin: FormattedAdmin[] = admins.map((admin) => ({
             id: admin.id,
             username: admin.username,
             super_admin: admin.super_admin,
@@ -48,7 +32,7 @@ class AdminService {
             return null;
         }
 
-        const formattedUser: FormattedUser[] = users.map((user: any) => ({
+        const formattedUser: FormattedUser[] = users.map((user) => ({
             id: user.id,
             name: user.name,
             email: user.email,
@@ -83,13 +67,15 @@ class AdminService {
         }
     }
 
-    async registerAdmin(username: string, password: string): Promise<any | null>{
+    async registerAdmin(username: string, password: string): Promise<void | null>{
         const id: string = uuidv4();
         const admin =  await AdminRepository.findByUsername(username);
 
         if (admin) {
             return null;
         }
+
+        password = await bcrypt.hash(password, 10);
 
         return await AdminRepository.create(
             id,

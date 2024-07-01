@@ -1,45 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import OrderRepository from '../repositories/OrderRepository';
 import CarRepository from '../repositories/CarRepository';
-
-interface FormattedCar {
-    manufacture: string;
-    model: string;
-    type: string;
-}
-
-interface FormattedUser {
-    name: string;
-    email: string;
-    address: string;
-    phone_number: string;
-}
-
-interface FormattedOrderDetail {
-    id: string;
-    duration: number;
-    rent_start: Date;
-    rent_end: Date;
-    total_price: number;
-    status: string;
-    car: FormattedCar;
-    user: FormattedUser;
-    created_at: Date;
-    updated_at: Date;
-}
-
-interface FormattedOrder {
-    id: string;
-    manufacture: string,
-    model: string,
-    type: string,    
-    duration: number;
-    rent_start: Date;
-    rent_end: Date;
-    total_price: number;
-    status: string;
-    created_at: Date;
-}
+import { FormattedOrder, FormattedOrderDetail } from '../interfaces/Order';
 
 class OrderService {
     async getAllOrders(): Promise<FormattedOrderDetail[] | null> {
@@ -49,7 +11,7 @@ class OrderService {
             return null;
         }
 
-        const formattedOrder: FormattedOrderDetail[] = orders.map((order: any) => ({
+        const formattedOrder: FormattedOrderDetail[] = orders.map((order) => ({
             id: order.id,
             duration: order.duration,
             rent_start: order.rent_start,
@@ -81,7 +43,7 @@ class OrderService {
             return null;
         }
 
-        const formattedOrder: FormattedOrder[] = orders.map((order: any) => ({
+        const formattedOrder: FormattedOrder[] = orders.map((order) => ({
             id: order.id,
             manufacture: order.cars.manufacture,
             model: order.cars.model,

@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import Controller from './Controller';
 import OrderService from '../services/OrderService';
+import { AdminOrUserRequest, AdminRequest, UserRequest } from '../interfaces/AuthRequest';
 
 class OrderController extends Controller {
-    public getOrder = async (req: Request | any, res: Response): Promise<void> => {
+    public getOrder = async (req: AdminOrUserRequest, res: Response): Promise<void> => {
         const user = req.user;
         const admin = req.admin;
         let orders;
@@ -25,7 +26,7 @@ class OrderController extends Controller {
         }
     }
     
-    public getOrderById = async (req: Request | any, res: Response): Promise<void> => {
+    public getOrderById = async (req: AdminOrUserRequest, res: Response): Promise<void> => {
         const id: string = req.params.id;
         const user = req.user;
         const admin = req.admin;
@@ -48,23 +49,26 @@ class OrderController extends Controller {
         }
     }
     
-    public createOrder = async (req: Request | any, res: Response): Promise<void> => {
+    public createOrder = async (req: UserRequest, res: Response): Promise<void> => {
         const {
             car_id,
             duration,
         } = req.body;
         const user = req.user;
-        const user_id: string = user.id;
 
         try {
-            const order = await OrderService.createOrder(
-                car_id,
-                user_id,
-                duration
-            );
+            if (user) {
+                const user_id: string = user.id;
 
-            if (order === null) {
-                return this.handleNotFound(res, 'Car not available');
+                const order = await OrderService.createOrder(
+                    car_id,
+                    user_id,
+                    duration
+                );
+    
+                if (order === null) {
+                    return this.handleNotFound(res, 'Car not available');
+                }
             }
             
             this.handleCreated(res, 'Order created successfully');
@@ -73,7 +77,7 @@ class OrderController extends Controller {
         }
     }
     
-    public updateOrder = async (req: Request, res: Response): Promise<void> => {
+    public updateOrder = async (req: AdminRequest, res: Response): Promise<void> => {
         const id: string = req.params.id;
         const {
             status,

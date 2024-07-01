@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import Controller from './Controller';
 import UserService from '../services/UserService';
+import { UserRequest } from '../interfaces/AuthRequest';
 
 class UserController extends Controller {
-    public currentUser = async (req: Request | any, res: Response): Promise<void> => {
+    public currentUser = async (req: UserRequest, res: Response): Promise<void> => {
         const user = req.user;
 
         if(!user) {
@@ -56,7 +57,6 @@ class UserController extends Controller {
             this.handleError(res, err, 'Failed to register user');
         }
     };
-
 }
 
 export default new UserController();

@@ -1,7 +1,7 @@
 import { Response } from 'express';
 
 class Controller {
-    protected handleSuccess(res: Response, data: any, message: string = 'Success'): void {
+    protected handleSuccess<T>(res: Response, data: T, message: string = 'Success'): void {
         res.status(200).json({ message, data });
     }
 
@@ -29,7 +29,7 @@ class Controller {
         res.status(404).json({ message });
     }
 
-    protected handleError(res: Response, error: any, message: string = 'An error occurred'): void {
+    protected handleError(res: Response, error: unknown, message: string = 'An error occurred'): void {
         console.error(error);
         res.status(500).json({ message });
     }

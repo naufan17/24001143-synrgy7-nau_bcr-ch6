@@ -1,4 +1,4 @@
-import bcrypt from 'bcryptjs';
+import { transaction, Transaction } from 'objection';
 import User from '../models/User';
 
 class UserRepository {
@@ -17,15 +17,17 @@ class UserRepository {
         address: string,
         phone_number: string,
         password: string
-    ): Promise<User> {
-        return await User.query().insert({
-            id,
-            name,
-            email,
-            address,
-            phone_number,
-            password: await bcrypt.hash(password, 10),
-        });
+    ): Promise<void> {
+        return await transaction(User.knex(), async(trx:Transaction) => {
+            await User.query(trx).insert({
+                id,
+                name,
+                email,
+                address,
+                phone_number,
+                password: password
+            });                
+        })
     }
 }
 

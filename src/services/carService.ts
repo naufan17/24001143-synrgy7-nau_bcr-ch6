@@ -1,61 +1,16 @@
 import { v4 as uuidv4 } from 'uuid';
 import CarRepository from "../repositories/CarRepository";
-
-interface formattedCar {
-    id: string;
-    plate: string;
-    manufacture: string;
-    model: string;
-    image: string;
-    capacity: number;
-    description: string;
-    transmission: string;
-    type: string;
-    year: number;
-    rent_price: number;
-    available: boolean;
-    option: string[];
-    spec: string[];
-}
-
-interface FormattedCarDetail {
-    id: string;
-    plate: string;
-    manufacture: string;
-    model: string;
-    image: string;
-    capacity: number;
-    description: string;
-    transmission: string;
-    type: string;
-    year: number;
-    rent_price: number;
-    available: boolean;
-    option: string[];
-    spec: string[];
-    create: {
-        created_by: string | null;
-        created_at: Date;
-    };
-    update: {
-        updated_by: string | null;
-        updated_at: Date;
-    };
-    delete: {
-        deleted_by: string | null;
-        deleted_at: Date;
-    };
-}
+import { FormattedCar, FormattedCarDetail } from '../interfaces/Car';
 
 class CarService {
-    async getAllCars(): Promise<formattedCar[] | null> {
+    async getAllCars(): Promise<FormattedCar[] | null> {
         const cars = await CarRepository.findAll();
 
         if (!cars) {
             return null;
         }
 
-        const formattedCar: formattedCar[] = cars.map((car: any) => ({
+        const formattedCar: FormattedCar[] = cars.map((car) => ({
             id: car.id,
             plate: car.plate,
             manufacture: car.manufacture,
@@ -68,21 +23,21 @@ class CarService {
             year: car.year,
             rent_price: car.rent_price,
             available: car.available,
-            option: car.options.map((option: any) => option.option),
-            spec: car.specs.map((spec: any) => spec.spec),
+            option: car.options.map((option: { option: string }) => option.option),
+            spec: car.specs.map((spec: { spec: string }) => spec.spec),
         }));
 
         return formattedCar;
     }
 
-    async getAllCarsNotDeleted() {
+    async getAllCarsNotDeleted(): Promise<FormattedCarDetail[] | null> {
         const cars = await CarRepository.findAllNotDeleted();
 
         if (!cars) {
             return null;
         }
 
-        const formattedCar: FormattedCarDetail[] = cars.map((car: any) => ({
+        const formattedCar: FormattedCarDetail[] = cars.map((car) => ({
             id: car.id,
             plate: car.plate,
             manufacture: car.manufacture,
@@ -95,8 +50,8 @@ class CarService {
             year: car.year,
             rent_price: car.rent_price,
             available: car.available,
-            option: car.options.map((option: any) => option.option),
-            spec: car.specs.map((spec: any) => spec.spec),
+            option: car.options.map((option: { option: string }) => option.option),
+            spec: car.specs.map((spec: { spec: string }) => spec.spec),
             create: {
                 created_by: car.createdByAdmin ? car.createdByAdmin.username : null,
                 created_at: car.created_at,
@@ -114,14 +69,14 @@ class CarService {
         return formattedCar;
     }
 
-    async getCarById(id: string): Promise<formattedCar | null> {
+    async getCarById(id: string): Promise<FormattedCar | null> {
         const car = await CarRepository.findById(id);
 
         if (!car) {
             return null;
         }
 
-        const formattedCar: formattedCar = {
+        const formattedCar: FormattedCar = {
             id: car.id,
             plate: car.plate,
             manufacture: car.manufacture,
@@ -134,8 +89,8 @@ class CarService {
             year: car.year,
             rent_price: car.rent_price,
             available: car.available,
-            option: car.options.map((option: any) => option.option),
-            spec: car.specs.map((spec: any) => spec.spec),
+            option: car.options.map((option: { option: string }) => option.option),
+            spec: car.specs.map((spec: { spec: string }) => spec.spec),
         };
 
         return formattedCar;
@@ -161,8 +116,8 @@ class CarService {
             year: car.year,
             rent_price: car.rent_price,
             available: car.available,
-            option: car.options.map((option: any) => option.option),
-            spec: car.specs.map((spec: any) => spec.spec),
+            option: car.options.map((option: { option: string }) => option.option),
+            spec: car.specs.map((spec: { spec: string }) => spec.spec),
             create: {
                 created_by: car.createdByAdmin ? car.createdByAdmin.username : null,
                 created_at: car.created_at,

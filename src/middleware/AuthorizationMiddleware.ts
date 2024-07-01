@@ -1,8 +1,9 @@
-import { Request, Response, NextFunction } from 'express';
+import { Response, NextFunction } from 'express';
 import Middleware from './Middleware';
+import { AdminRequest, UserRequest } from '../interfaces/AuthRequest';
 
 class AuthorizationMiddleware extends Middleware {
-    public authorizeAdmin = (req: Request | any, res: Response, next: NextFunction): void => {
+    public authorizeAdmin = (req: AdminRequest, res: Response, next: NextFunction): void => {
         const admin = req.admin
 
         if (admin && (admin.super_admin === true || admin.super_admin === false)) {
@@ -12,7 +13,7 @@ class AuthorizationMiddleware extends Middleware {
         }
     }
 
-    public authorizeSuperAdmin = (req: Request | any, res: Response, next: NextFunction): void => {
+    public authorizeSuperAdmin = (req: AdminRequest, res: Response, next: NextFunction): void => {
         const admin = req.admin
 
         if (admin && admin.super_admin === true) {
@@ -22,7 +23,7 @@ class AuthorizationMiddleware extends Middleware {
         }
     }
 
-    public authorizeUser = (req: Request | any, res: Response, next: NextFunction): void => {
+    public authorizeUser = (req: UserRequest, res: Response, next: NextFunction): void => {
         const user = req.user
 
         if (user) {

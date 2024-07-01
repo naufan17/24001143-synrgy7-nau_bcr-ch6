@@ -1,9 +1,10 @@
 import { Request, Response } from 'express';
 import Controller from './Controller';
 import AdminService from '../services/AdminService';
+import { AdminRequest } from '../interfaces/AuthRequest';
 
 class AdminController extends Controller {    
-    public currentAdmin = async (req: Request | any, res: Response): Promise<void> => {
+    public currentAdmin = async (req: AdminRequest, res: Response): Promise<void> => {
         const admin = req.admin;
 
         if(!admin) {
@@ -69,7 +70,7 @@ class AdminController extends Controller {
                 password
             )
 
-            if (admin === null) {
+            if (!admin) {
                 return this.handleNotFound(res, 'Admin already registered');
             }
             

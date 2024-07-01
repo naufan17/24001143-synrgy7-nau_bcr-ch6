@@ -1,9 +1,10 @@
-import { Request, Response } from 'express';
+import { Response } from 'express';
 import Controller from './Controller';
 import carService from '../services/CarService';
+import { AdminRequest } from '../interfaces/AuthRequest';
 
 class CarController extends Controller {
-    public getCar = async (req: Request | any, res: Response): Promise<void> => {
+    public getCar = async (req: AdminRequest, res: Response): Promise<void> => {
         const admin = req.admin;
         let cars;
 
@@ -24,7 +25,7 @@ class CarController extends Controller {
         }
     }
     
-    public getCarById = async (req: Request | any, res: Response): Promise<void> => {
+    public getCarById = async (req: AdminRequest, res: Response): Promise<void> => {
         const id: string = req.params.id;
         const admin = req.admin;
         let car;
@@ -46,7 +47,7 @@ class CarController extends Controller {
         }
     }
     
-    public createCar = async (req: Request | any, res: Response): Promise<void> => {
+    public createCar = async (req: AdminRequest, res: Response): Promise<void> => {
         const {
             plate,
             manufacture,
@@ -61,24 +62,28 @@ class CarController extends Controller {
             option,
             spec
         } = req.body;
-        const admin_id: string = req.admin.id;
+        const admin = req.admin;
         
         try {
-            await carService.createCar( 
-                admin_id,       
-                plate,
-                manufacture,
-                model,
-                image,
-                capacity,
-                description,
-                transmission,
-                type,
-                year,
-                rent_price,
-                option,
-                spec
-            );
+            if (admin) {
+                const admin_id: string = admin.id;
+
+                await carService.createCar( 
+                    admin_id,       
+                    plate,
+                    manufacture,
+                    model,
+                    image,
+                    capacity,
+                    description,
+                    transmission,
+                    type,
+                    year,
+                    rent_price,
+                    option,
+                    spec
+                );    
+            }
             
             this.handleCreated(res, 'Car created successfully');
         } catch (err) {
@@ -86,7 +91,7 @@ class CarController extends Controller {
         }
     };
     
-    public updateCar = async (req: Request|any, res: Response): Promise<void> => {
+    public updateCar = async (req: AdminRequest, res: Response): Promise<void> => {
         const id: string = req.params.id;
         const {
             plate,
@@ -103,26 +108,30 @@ class CarController extends Controller {
             option,
             spec
         } = req.body;
-        const admin_id: string = req.admin.id;
+        const admin = req.admin;
     
         try {
-            await carService.updateCar(
-                admin_id,     
-                id,   
-                plate,
-                manufacture,
-                model,
-                image,
-                capacity,
-                description,
-                transmission,
-                type,
-                year,
-                rent_price,
-                available,
-                option,
-                spec
-            );
+            if (admin) {
+                const admin_id: string = admin.id;
+
+                await carService.updateCar(
+                    admin_id,     
+                    id,   
+                    plate,
+                    manufacture,
+                    model,
+                    image,
+                    capacity,
+                    description,
+                    transmission,
+                    type,
+                    year,
+                    rent_price,
+                    available,
+                    option,
+                    spec
+                );
+            }
     
             this.handleCreated(res, 'Car updated successfully');
         } catch (err) {
@@ -130,15 +139,19 @@ class CarController extends Controller {
         }
     }
     
-    public deleteCar = async (req: Request|any, res: Response): Promise<void> => {
+    public deleteCar = async (req: AdminRequest, res: Response): Promise<void> => {
         const id: string = req.params.id;
-        const admin_id: string = req.admin.id;
+        const admin = req.admin;
     
         try {
-            const car = await carService.deleteCar(id, admin_id);
+            if (admin) {
+                const admin_id: string = admin.id;
+                
+                const car = await carService.deleteCar(id, admin_id);
     
-            if (!car) {
-                return this.handleNotFound(res, 'Car not found')
+                if (!car) {
+                    return this.handleNotFound(res, 'Car not found')
+                }    
             }
 
             this.handleDeleted(res, 'Car deleted successfully')
