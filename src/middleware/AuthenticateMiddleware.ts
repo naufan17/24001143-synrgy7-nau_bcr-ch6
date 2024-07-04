@@ -45,7 +45,6 @@ class AuthenticateMiddleware extends Middleware {
         }
     };    
 
-
     public passAuthenticateAdmin = (req: AdminOrUserRequest, res: Response, next: NextFunction): void => {
         const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         

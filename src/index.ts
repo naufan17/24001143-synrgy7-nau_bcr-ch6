@@ -8,7 +8,7 @@ import cors from 'cors';
 import './config/database';
 
 const openAPIDocument = YAML.load('././openapi.yaml');
-const port: number = Number(process.env.PORT) || 5000;
+const port: number = Number(process.env.PORT) || 8000;
 const app: Express = express();
 
 app.use(express.json());

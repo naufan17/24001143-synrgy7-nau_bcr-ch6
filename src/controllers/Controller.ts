@@ -25,6 +25,10 @@ class Controller {
         res.status(401).json({ message });
     }
 
+    protected handleForbidden(res: Response, message: string = 'Forbidden'): void  {
+        res.status(403).json({ message });
+    }
+
     protected handleNotFound(res: Response, message: string = 'Not found'): void {
         res.status(404).json({ message });
     }
