@@ -1,13 +1,12 @@
-import { Request, Response } from 'express';
-import express, { Express } from 'express';
+import express, { Express, Request, Response } from 'express';
 import swaggerUi from 'swagger-ui-express';
 import YAML from 'yamljs'
 import morgan from 'morgan';
-import routes from './routes/routes';
+import routes from './routes';
 import cors from 'cors';
 import './config/database';
 
-const openAPIDocument = YAML.load('././openapi.yaml');
+const openAPIDocument = YAML.load("./docs/openapi.yaml");
 const port: number = Number(process.env.PORT) || 8000;
 const app: Express = express();
 

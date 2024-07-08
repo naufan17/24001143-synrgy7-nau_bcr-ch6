@@ -1,5 +1,5 @@
 import jwt, { SignOptions, VerifyOptions } from 'jsonwebtoken';
-import secret_token from '../config/secretToken';
+import { secret_token } from '../config/secretToken';
 import { Payload } from '../interfaces/JwtPayload';
 
 export const generateToken = (payload: Payload) => {

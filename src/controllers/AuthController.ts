@@ -16,7 +16,7 @@ class AuthController extends Controller {
         try {
             const decoded = verifyToken(token) as Admin | User;
 
-            this.handleSuccess(res, { user : decoded }, "Token is valid")
+            this.handleSuccess(res, { admin : decoded }, "Token is valid")
         } catch (err) {
             this.handleForbidden(res, 'Invalid token');
         }

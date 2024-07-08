@@ -1,6 +1,6 @@
 import { Response, NextFunction } from 'express';
-import { verifyToken } from '../utils/jwt';
 import Middleware from './Middleware'
+import { verifyToken } from '../utils/jwt';
 import { AdminOrUserRequest } from '../interfaces/AuthRequest';
 import { Admin } from '../interfaces/Admin';
 import { User } from '../interfaces/User';
