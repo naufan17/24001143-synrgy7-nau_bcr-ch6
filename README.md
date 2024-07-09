@@ -1,4 +1,4 @@
-# Car Management Dashboard
+# Car Management API
 HTTP Rest API database cars
 
 ## Database schema
