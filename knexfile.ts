@@ -19,7 +19,6 @@ const {
   PRODUCTION_PASSWORD,
   PRODUCTION_DATABASE,
   PRODUCTION_HOST,
-  PRODUCTION_PORT,
 } = process.env as Required<DatabaseConfig>;
 
 const config: { [key: string]: Knex.Config } = {
@@ -66,7 +65,6 @@ const config: { [key: string]: Knex.Config } = {
       user: PRODUCTION_USERNAME,
       password: PRODUCTION_PASSWORD,
       host: PRODUCTION_HOST,
-      port: Number(PRODUCTION_PORT)
     },
     pool: {
       min: 2,
