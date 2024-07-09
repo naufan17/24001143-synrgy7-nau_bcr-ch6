@@ -63,6 +63,9 @@ const config: { [key: string]: Knex.Config } = {
       user: PRODUCTION_USERNAME,
       password: PRODUCTION_PASSWORD,
       host: PRODUCTION_HOST,
+      ssl: {
+        rejectUnauthorized: false,
+      }  
     },
     pool: {
       min: 2,
