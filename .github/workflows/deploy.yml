@@ -21,11 +21,11 @@ jobs:
     - name: Install dependencies
       run: npm install
 
-    - name: Migrate database
-      run: npm run migrate
+    # - name: Migrate database
+    #   run: npm run migrate
 
-    - name: Seed database
-      run: npm run seed
+    # - name: Seed database
+    #   run: npm run seed
 
     - name: Deploy to Koyeb
       env:
@@ -54,12 +54,6 @@ jobs:
 
   #   - name: Install dependencies
   #     run: npm install
-
-  #   - name: Migrate database
-  #     run: npm run migrate
-
-  #   - name: Seed database
-  #     run: npm run seed
 
   #   - name: Deploy to Fly.io
   #     env:
