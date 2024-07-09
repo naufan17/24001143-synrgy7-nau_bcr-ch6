@@ -6,7 +6,7 @@ import { Admin } from '../interfaces/Admin';
 import { User } from '../interfaces/User';
 
 class AuthController extends Controller {    
-    public validateToken = async (req: AdminOrUserRequest, res: Response): Promise<void> => {
+    public validateToken = async (req: AdminOrUserRequest | any, res: Response): Promise<void> => {
         const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {

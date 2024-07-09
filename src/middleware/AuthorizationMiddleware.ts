@@ -23,7 +23,7 @@ class AuthorizationMiddleware extends Middleware {
         }
     }
 
-    public authorizeUser = (req: UserRequest, res: Response, next: NextFunction): void => {
+    public authorizeUser = (req: UserRequest | any, res: Response, next: NextFunction): void => {
         const user = req.user
 
         if (user) {

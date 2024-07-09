@@ -4,7 +4,7 @@
   "description": "",
   "main": "src/index.ts",
   "scripts": {
-    "start": "node src/index.ts",
+    "start": "ts-node src/index.ts",
     "dev": "nodemon src/index.ts",
     "migrate": "knex migrate:latest",
     "seed": "knex seed:run",
@@ -50,7 +50,6 @@
     "eslint": "^8.57.0",
     "eslint-plugin-react": "^7.34.3",
     "globals": "^15.6.0",
-    "ts-node": "^10.9.2",
     "typescript": "^5.5.3",
     "typescript-eslint": "^7.14.1"
   }

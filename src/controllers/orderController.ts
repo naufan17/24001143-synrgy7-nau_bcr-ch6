@@ -4,7 +4,7 @@ import OrderService from '../services/OrderService';
 import { AdminOrUserRequest, AdminRequest, UserRequest } from '../interfaces/AuthRequest';
 
 class OrderController extends Controller {
-    public getOrder = async (req: AdminOrUserRequest, res: Response): Promise<void> => {
+    public getOrder = async (req: AdminOrUserRequest | any, res: Response): Promise<void> => {
         const user = req.user;
         const admin = req.admin;
         let orders;
@@ -26,7 +26,7 @@ class OrderController extends Controller {
         }
     }
     
-    public getOrderById = async (req: AdminOrUserRequest, res: Response): Promise<void> => {
+    public getOrderById = async (req: AdminOrUserRequest | any, res: Response): Promise<void> => {
         const id: string = req.params.id;
         const user = req.user;
         const admin = req.admin;
@@ -49,7 +49,7 @@ class OrderController extends Controller {
         }
     }
     
-    public createOrder = async (req: UserRequest, res: Response): Promise<void> => {
+    public createOrder = async (req: UserRequest | any, res: Response): Promise<void> => {
         const { car_id, duration } = req.body;
         const user = req.user;
 

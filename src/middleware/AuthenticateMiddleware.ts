@@ -6,7 +6,7 @@ import { Admin } from '../interfaces/Admin';
 import { User } from '../interfaces/User';
 
 class AuthenticateMiddleware extends Middleware {
-    public authenticate = (req: AdminOrUserRequest, res: Response, next: NextFunction): void => {
+    public authenticate = (req: AdminOrUserRequest | any, res: Response, next: NextFunction): void => {
         const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {
@@ -29,7 +29,7 @@ class AuthenticateMiddleware extends Middleware {
         }
     };    
 
-    public passAuthenticateUser = (req: AdminOrUserRequest, res: Response, next: NextFunction): void => {
+    public passAuthenticateUser = (req: AdminOrUserRequest | any, res: Response, next: NextFunction): void => {
         const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {
@@ -45,7 +45,7 @@ class AuthenticateMiddleware extends Middleware {
         }
     };    
 
-    public passAuthenticateAdmin = (req: AdminOrUserRequest, res: Response, next: NextFunction): void => {
+    public passAuthenticateAdmin = (req: AdminOrUserRequest | any, res: Response, next: NextFunction): void => {
         const token: string | undefined = req.header('Authorization')?.split(' ')[1];
         
         if (!token) {

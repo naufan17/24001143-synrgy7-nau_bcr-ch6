@@ -4,7 +4,7 @@ import UserService from '../services/UserService';
 import { UserRequest } from '../interfaces/AuthRequest';
 
 class UserController extends Controller {
-    public currentUser = async (req: UserRequest, res: Response): Promise<void> => {
+    public currentUser = async (req: UserRequest | any, res: Response): Promise<void> => {
         const user = req.user;
 
         if(!user) {
