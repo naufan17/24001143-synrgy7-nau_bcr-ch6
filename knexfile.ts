@@ -39,7 +39,6 @@ const config: { [key: string]: Knex.Config } = {
       tableName: "knex_migrations"
     }
   },
-
   staging: {
     client: "postgresql",
     connection: {
@@ -57,7 +56,6 @@ const config: { [key: string]: Knex.Config } = {
       tableName: "knex_migrations"
     }
   },
-
   production: {
     client: "postgresql",
     connection: {
@@ -74,7 +72,6 @@ const config: { [key: string]: Knex.Config } = {
       tableName: "knex_migrations"
     }
   }
-
 };
 
 export default config;
