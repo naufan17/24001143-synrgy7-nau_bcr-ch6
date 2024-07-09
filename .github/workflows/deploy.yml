@@ -6,26 +6,6 @@ on:
       - challenge_6
 
 jobs:
-  deploy_to_fly:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v3
-
-    - name: Set up Node.js
-      uses: actions/setup-node@v3
-      with:
-        node-version: '14'  # Use appropriate Node.js version
-
-    - name: Install dependencies
-      run: npm install
-
-    - name: Deploy to Fly.io
-      env:
-        FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
-      run: |
-        flyctl deploy --car-management-api --token $FLY_API_TOKEN
-
   deploy_to_koyeb:
     runs-on: ubuntu-latest
 
@@ -41,6 +21,9 @@ jobs:
     - name: Install dependencies
       run: npm install
 
+    - name: Build application
+      run: npm run build
+
     - name: Deploy to Koyeb
       env:
         KOYEB_API_TOKEN: ${{ secrets.KOYEB_API_TOKEN }}
@@ -54,3 +37,23 @@ jobs:
                 "branch": "challenge_6"
               }    
             }'
+
+  # deploy_to_fly:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #   - name: Checkout code
+  #     uses: actions/checkout@v3
+
+  #   - name: Set up Node.js
+  #     uses: actions/setup-node@v3
+  #     with:
+  #       node-version: '20'
+
+  #   - name: Install dependencies
+  #     run: npm install
+
+  #   - name: Deploy to Fly.io
+  #     env:
+  #       FLY_API_TOKEN: ${{ secrets.FLY_API_TOKEN }}
+  #     run: |
+  #       fly deploy --car-management-api --token $FLY_API_TOKEN
