@@ -16,6 +16,16 @@ primary_region = 'sin'
   min_machines_running = 0
   processes = ['app']
 
+[env]
+  ENVIRONMENT = 'production'
+  SECRET_TOKEN = '09f26e402586e2faa8da4c98a35f1b20d6b033c6097befa8be3486a829587fe2f90a832bd3ff9d42710a4da095a2ce285b009f0c3730cd9b8e1af3eb84df6611'
+  CLOUD_NAME = 'ddpbwjjfz'
+  API_KEY = '978931698348746'
+  API_SECRET = '6aJUsabfVgJns-wvPluvObUCRTE'  PRODUCTION_HOST = 'ep-bold-leaf-a27i2rk7.eu-central-1.pg.koyeb.app'
+  PRODUCTION_USERNAME = 'koyeb-adm'
+  PRODUCTION_PASSWORD = 'EeCGz9uO7nTl'
+  PRODUCTION_DATABASE = 'binar_car_rental'
+
 [[vm]]
   memory = '1gb'
   cpu_kind = 'shared'

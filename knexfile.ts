@@ -10,11 +10,6 @@ const {
   DEVELOPMENT_DATABASE,
   DEVELOPMENT_HOST,
   DEVELOPMENT_PORT,
-  STAGING_USERNAME,
-  STAGING_PASSWORD,
-  STAGING_DATABASE,
-  STAGING_HOST,
-  STAGING_PORT,
   PRODUCTION_USERNAME,
   PRODUCTION_PASSWORD,
   PRODUCTION_DATABASE,
@@ -36,24 +31,11 @@ const config: { [key: string]: Knex.Config } = {
       max: 10
     },
     migrations: {
-      tableName: "knex_migrations"
-    }
-  },
-  staging: {
-    client: "postgresql",
-    connection: {
-      database: STAGING_DATABASE,
-      user: STAGING_USERNAME,
-      password: STAGING_PASSWORD,
-      host: STAGING_HOST,
-      port: Number(STAGING_PORT)
+      tableName: "knex_migrations",
+      directory: './database/migrations'
     },
-    pool: {
-      min: 2,
-      max: 10
-    },
-    migrations: {
-      tableName: "knex_migrations"
+    seeds: {
+      directory: './database/seeds'
     }
   },
   production: {
@@ -72,7 +54,11 @@ const config: { [key: string]: Knex.Config } = {
       max: 10
     },
     migrations: {
-      tableName: "knex_migrations"
+      tableName: "knex_migrations",
+      directory: './database/migrations'
+    },
+    seeds: {
+      directory: './database/seeds'
     }
   }
 };
